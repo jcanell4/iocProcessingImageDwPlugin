@@ -62,6 +62,9 @@
                 node.appendChild(div);
             });
         };
+        
+        
+        
         var handleDnD = function(domnode, uploader) {
             if (uploader.addDropTarget && uploader.uploadType == 'html5') {
                 domConst.create('div', {innerHTML: 'Pots arrosegar el fitxer fins aquí'}, domnode, 'last');
@@ -81,21 +84,21 @@
 <div style="width: 800; height: 600px">
     <div id="processingmanager"></div>
     <div id="import" >
-        <form id="f1" name="f1" method="post" action="/dokuwiki/lib/plugins/ajaxcommand/ajax.php?call=commandreport" enctype="multipart/form-data">
+        <form id="f1" name="f1" method="post" action="/dokuwiki/lib/plugins/ajaxcommand/ajax.php?call=save_pde_algorithm" enctype="multipart/form-data">
             <fieldset>
                 <legend>Formulari per carregar algorismes de Processing</legend>
                 Fitxer: <div data-dojo-type="dojox/form/Uploader" id="uploader" data-dojo-props="name:'uploadedfile',showInput:'before',isDebug:true">Selecciona</div>
                 <div>
                 <label for="id_field">Id: </label>
-                <input type="text" name="id" id="id_field" value="idDani" aria-label="album" />
+                <input title="Introdueix una sola paraula" type="text" name="id" id="id_field" value="idDani" aria-label="album" />
                 </div>
                 <div>
                 <label for="nom_field">Nom: </label>
-                <input type="text" name="nom" id="nom_field" value="Dani" aria-label="year" />
+                <input type="text" name="nom" id="nom_field" value="Dani" aria-label="nom" />
                 </div>
                 <div>
                 <label for="descripcio_field">Descripció: </label>
-                <input type="textarea" name="descripcio" id="id_descripcio" value="Descripcio dani" aria-label="year" />
+                <textarea id="descripcio_field" name="descripcio" aria-label="descripcio">Descripcio dani</textarea>
                 </div>
                 <input type="button" id="remBtn" label="Neteja" data-dojo-type="dijit/form/Button" />
                 <input type="submit" id="submit" label="Carrega" data-dojo-type="dijit/form/Button" />
