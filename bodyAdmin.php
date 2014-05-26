@@ -62,12 +62,12 @@
                 node.appendChild(div);
             });
         };
-        
-        
-        
+
+
+
         var handleDnD = function(domnode, uploader) {
             if (uploader.addDropTarget && uploader.uploadType == 'html5') {
-                domConst.create('div', {innerHTML: 'Pots arrosegar el fitxer fins aquí'}, domnode, 'last');
+//                domConst.create('div', {innerHTML: 'Pots arrosegar el fitxer fins aquí'}, domnode, 'last');
                 uploader.addDropTarget(domnode);
             }
         };
@@ -79,33 +79,55 @@
             handleDnD(uploader.domNode.parentNode, uploader);
         }
     });
-</script> 
-
+</script>
+<style type="text/css">
+    .processingField {
+        margin-bottom: 5px;
+    }
+    
+    .processingField .labelcol {
+        float:left; 
+        width: 75px; 
+        text-align: right;
+    }
+    .processingField .labelcol label {
+        font-weight: bold;
+    }
+</style>
 <div style="width: 800; height: 600px">
     <div id="processingmanager"></div>
     <div id="import" >
         <form id="f1" name="f1" method="post" action="/dokuwiki/lib/plugins/ajaxcommand/ajax.php?call=save_pde_algorithm" enctype="multipart/form-data">
-            <fieldset>
+            <fieldset style="text-align: left; width:95%; height: 95%;" >
                 <legend>Formulari per carregar algorismes de Processing</legend>
-                Fitxer: <div data-dojo-type="dojox/form/Uploader" id="uploader" data-dojo-props="name:'uploadedfile',showInput:'before',isDebug:true">Selecciona</div>
-                <div>
-                <label for="id_field">Id: </label>
-                <input title="Introdueix una sola paraula" type="text" name="id" id="id_field" value="idDani" aria-label="album" />
+                <input type="hidden" name="do" id="doField"/>
+                <div class="processingField">
+                    <span class="labelcol">
+                        <label for="uploader">Fitxer: </label>
+                    </span>
+                    <div title="Pots arrosegar el fitxer fins aquí" data-dojo-type="dojox/form/Uploader" id="uploader" data-dojo-props="name:'uploadedfile',showInput:'before',isDebug:true">Selecciona</div>
+                    <span>Pots arrosegar el fitxer fins aquí</span>
                 </div>
-                <div>
-                <label for="nom_field">Nom: </label>
-                <input type="text" name="nom" id="nom_field" value="Dani" aria-label="nom" />
+                <div class="processingField">
+                    <span class="labelcol">
+                        <label for="nom_field" >Nom: </label>
+                    </span>
+                    <input style="margin-left: 3px" title="Introdueix un nom a l'algorisme" type="text" name="nom" id="nomField" value="Dani" aria-label="nom" />
                 </div>
-                <div>
-                <label for="descripcio_field">Descripció: </label>
-                <textarea id="descripcio_field" name="descripcio" aria-label="descripcio">Descripcio dani</textarea>
+                <div class="processingField">
+                    <span class="labelcol">
+                        <label for="descripcio_field">Descripció: </label>
+                    </span>
+                    <textarea id="descripcioField" rows="5" style="width: 50%; margin-left: 3px;" name="descripcio" aria-label="descripcio">Descripcio dani</textarea>
                 </div>
-                <input type="button" id="remBtn" label="Neteja" data-dojo-type="dijit/form/Button" />
-                <input type="submit" id="submit" label="Carrega" data-dojo-type="dijit/form/Button" />
+                <div class="processingField">
+                    <span class="labelcol">&nbsp;
+                    </span>
+                    <input type="button" id="remBtn" label="Neteja" data-dojo-type="dijit/form/Button" />
+                    <input type="submit" id="submit" label="Carrega" data-dojo-type="dijit/form/Button" />
+                </div>
             </fieldset>
         </form>
         <div id="response"></div>
-
-
     </div>
 </div>
