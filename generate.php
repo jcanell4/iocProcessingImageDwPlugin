@@ -1,18 +1,18 @@
 <?php
-global $conf;
-global $_COOKIE;
-echo $conf['plugin']['processingmanager']['typeAttr'];//No funciona
-echo getSecurityToken();//No funciona
+//global $conf;
+//global $_COOKIE;
+//echo $conf['plugin']['processingmanager']['typeAttr'];//No funciona
+//echo getSecurityToken();//No funciona
 $strCookie = "";
-$ctrl = false;
-foreach ($_COOKIE as $key => $value) {
-    if ($ctrl) {
-        $strCookie .= "; ";
-    } else {
-        $ctrl = true;
-    }
-    $strCookie .= $key . "=" . rawurlencode($value);
-}
+//$ctrl = false;
+//foreach ($_COOKIE as $key => $value) {
+//    if ($ctrl) {
+//        $strCookie .= "; ";
+//    } else {
+//        $ctrl = true;
+//    }
+//    $strCookie .= $key . "=" . rawurlencode($value);
+//}
 
 $urls= "http://localhost/dokuwiki/lib/_java/pde/classes/,"
         ."http://localhost/dokuwiki/lib/_java/lib/core.jar,"
@@ -30,10 +30,10 @@ $applet = "
 <object type='application/x-java-applet' height='600' width='1000'>"
   ."<param name='code' value='ioc.wiki.processingmanager.applet.ImageGeneratorApplet' />"
   ."<param name='archive' value='./lib/_java/javatest/processingManager.jar' />"
-  ."<param name='urls' value='".$urls."'"
+  ."<param name='urls' value='".$urls."' />"
   . "<param name='Cookie' value='".$strCookie."' />"
 //  . "<param name='sectok' value='". getSecurityToken() . "' />"
-  . "<param name='getPdeClassesURL' value='".DOKU_URL."lib/plugins/ajaxcommand/ajax.php?call=get_pde_classes_info'/>"
+  . "<param name='getPdeClassesURL' value='"/*.DOKU_URL*/."lib/plugins/ajaxcommand/ajax.php?call=get_pde_classes_info'/>"
   
 //  <param name='commandToSave' value='".DOKU_URL."lib/plugins/ajaxcommand/ajax.php?call=auth_commandreport'/>"
 

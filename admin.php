@@ -68,10 +68,8 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
      */
     function html() {
         $generate = new generateImage();
-        $generate_html = $generate->getFileString();
-        //print $generate_html;
-        $params = array("@dani@"=>"dani");
-        $generate_html = $generate->remplacements($params, $generate_html);
+        $generate->setChanges(array("@dani@"=>"dani"));
+        $generate_html = $generate->getHtml();
         $html = "<div style='width: 800; height: 600px'>"
                 . "<div id='generate'>".$generate_html."</div>"
                 . "</div>";
