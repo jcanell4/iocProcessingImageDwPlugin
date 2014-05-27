@@ -2,6 +2,7 @@
 /**
  * @author Daniel Criado Casas<dani.criado.casas@gmail.com>
  */
+echo getSecurityToken();//Aquí si que funciona!
 ?>
 <script type="text/javascript">/*<![CDATA[*/
     require(["dijit/layout/TabContainer", "dijit/layout/ContentPane", "dojo/domReady!"], function(TabContainer, ContentPane) {
@@ -13,7 +14,7 @@
             title: "Generació"
         });
 
-        cpGenerate.set("href", "lib/plugins/processingmanager/generate.html");
+        cpGenerate.set("href", "lib/plugins/processingmanager/generate.php");
         tcProcessing.addChild(cpGenerate);
 
         var cpImport = new ContentPane({
