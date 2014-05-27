@@ -66,6 +66,8 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
      * output appropriate html
      */
     function html() {
-        include 'bodyAdmin.php';    
+        global $conf;
+        echo $this->getConf('typeAttr');
+        include 'bodyAdmin.php';
     }    
 }
