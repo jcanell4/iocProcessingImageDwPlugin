@@ -14,6 +14,7 @@
 if(!defined('DOKU_INC')) die();
 
 require_once DOKU_INC.'inc/common.php';
+require_once DOKU_INC.'lib/plugins/processingmanager/generateImage.php';
 
 /**
  * All DokuWiki plugins to extend the admin function
@@ -66,8 +67,14 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
      * output appropriate html
      */
     function html() {
-        global $conf;
-        echo $this->getConf('typeAttr');
-        include 'bodyAdmin.php';
+        $generate = new generateImage();
+        $generate_html = $generate->getFileString();
+        //print $generate_html;
+        $params = array("@dani@"=>"dani");
+        $generate_html = $generate->remplacements($params, $generate_html);
+        $html = "<div style='width: 800; height: 600px'>"
+                . "<div id='generate'>".$generate_html."</div>"
+                . "</div>";
+        echo $html;
     }    
 }
