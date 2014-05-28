@@ -10,10 +10,10 @@ if (!defined('DOKU_PROCESSING'))
 
 require_once DOKU_PROCESSING.'abstractGenerateHtml.php';
 
-class generateImage extends abstractGenerateHtml {
+class loadAlgorithm extends abstractGenerateHtml {
     
-    function generateImage() {
-        $this->setFile(DOKU_PROCESSING.'templates/generateImage.html');
+    function loadAlgorithm() {
+        $this->setFile(DOKU_PROCESSING.'templates/loadAlgorithm.html');
     }
     
 }

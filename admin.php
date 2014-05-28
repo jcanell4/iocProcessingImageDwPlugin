@@ -20,6 +20,7 @@ if (!defined('DOKU_PROCESSING'))
 
 require_once DOKU_INC.'inc/common.php';
 require_once DOKU_PROCESSING.'generators/generateImage.php';
+require_once DOKU_PROCESSING.'generators/loadAlgorithm.php';
 
 /**
  * All DokuWiki plugins to extend the admin function
@@ -72,9 +73,24 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
      * output appropriate html
      */
     function html() {
-        $generate = new generateImage();
-        $generate->setChanges(array("@dani@"=>"dani"));
-        $generate_html = $generate->getHtml();
+        $processingParams = array("@dani@"=>"dani");
+        
+        $generateImageGenerator = new generateImage();
+        $loadAlgorithmGenerator = new loadAlgorithm();
+        
+
+        $generateImageGenerator->setChanges($processingParams);
+        $generateImageHtml = $generateImageGenerator->getHtml();
+        
+        
+        $loadAlgorithmGenerator->setChanges($processingParams);
+        $loadAlgorithmHtml = $loadAlgorithmGenerator->getHtml();
+        
+        echo("<script>console.log('PHP: ".$generateImageHtml."');</script>");
+        echo("<script>console.log('PHP: ".$loadAlgorithmHtml."');</script>");
+        
+        
+        
         $dojo = 
         "<script type='text/javascript'>"
         ."require(["
@@ -84,10 +100,10 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
         . "]);</script>";
         $html = ""
         ."<div style='width: 800; height: 600px;'>"
-            . "<div data-dojo-type='dijit/layout/TabContainer' data-dojo-config=\"local='ca'\" style='width:100%; height: 100%;'>"
-                . "<div data-dojo-type='dijit/layout/ContentPane' data-dojo-config=\"local='ca'\" title='Generació de imatges' id='generateImage' >".$generate_html."</div>"
-                . "<div data-dojo-type='dijit/layout/ContentPane' title='Càrrega de algorismes' id='loadAlgorithm'>".$generate_html."</div>"
-                . "<div data-dojo-type='dijit/layout/ContentPane' title='Galeria de imatges' id='galleryImage'>".$generate_html."</div>"
+            . "<div data-dojo-type='dijit/layout/TabContainer' style='width:100%; height: 100%;'>"
+                . "<div data-dojo-type='dijit/layout/ContentPane' title='Generacio de imatges' id='generateImage' >".$generateImageHtml."</div>"
+                . "<div data-dojo-type='dijit/layout/ContentPane' title='Carrega de algorismes' id='loadAlgorithm'>".$loadAlgorithmHtml."</div>"
+//                . "<div data-dojo-type='dijit/layout/ContentPane' title='Galeria de imatges' id='galleryImage'>".$generate_html."</div>"
             . "</div>"
         . "</div>"
         . "";
