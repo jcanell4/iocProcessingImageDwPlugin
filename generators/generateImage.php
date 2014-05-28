@@ -34,7 +34,7 @@ class generateImage extends abstractGenerateHtml {
         //$changes['@CookieParam@'] = ;
         //$changes['@sectokParam@'] = ;
         $changes['@getPdeClassesURLParam@'] = /*DOKU_URL.*/"lib/plugins/ajaxcommand/ajax.php?call=get_pde_classes_info";
-        $changes['@getCommandToSaveParam@'] = /*DOKU_URL.*/"lib/plugins/ajaxcommand/ajax.php?call=auth_commandreport'/>";            
+        $changes['@getCommandToSaveParam@'] = /*DOKU_URL.*/"lib/plugins/ajaxcommand/ajax.php?call=auth_commandreport";            
         parent::setChanges($changes);
     }
     
