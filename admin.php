@@ -73,7 +73,9 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
      * output appropriate html
      */
     function html() {
-        $processingParams = array("@dani@"=>"dani");
+        $processingParams = array(
+            "@dani@"=>"dani",
+        );
         
         $generateImageGenerator = new generateImage();
         $loadAlgorithmGenerator = new loadAlgorithm();
@@ -86,8 +88,8 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
         $loadAlgorithmGenerator->setChanges($processingParams);
         $loadAlgorithmHtml = $loadAlgorithmGenerator->getHtml();
         
-        echo("<script>console.log('PHP: ".$generateImageHtml."');</script>");
-        echo("<script>console.log('PHP: ".$loadAlgorithmHtml."');</script>");
+//        echo("<script>console.log('PHP: ".$generateImageHtml."');</script>");
+//        echo("<script>console.log('PHP: ".$loadAlgorithmHtml."');</script>");
         
         
         
