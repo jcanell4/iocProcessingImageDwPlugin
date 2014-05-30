@@ -172,21 +172,10 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
     private function getUrlsValue() {
         $urls = $this->getConf('urls');
         $arrayUrls = split(',', $urls);
-        $urlsValue = "";
+        $urlsValue = DOKU_URL."lib/_java/pde/classes/";
         foreach ($arrayUrls as $key => $value) {
-            $urlsValue .= DOKU_URL."lib/_java/pde/classes/".$value.self::$COMMA; 
+            $urlsValue .= self::$COMMA.DOKU_URL."lib/_java/lib/".$value; 
         }
-        $urlsValue = substr($urlsValue, 0,-1);//Treure la ultima comma.
-//        $urlsValue = DOKU_JAVA_PDE_CLASSES . self::$COMMA
-//                . DOKU_JAVA_LIB . "core.jar" . self::$COMMA
-//                . DOKU_JAVA_LIB . "gluegen-rt-natives-linux-i586.jar" . self::$COMMA
-//                . DOKU_JAVA_LIB . "gluegen-rt.jar" . self::$COMMA
-//                . DOKU_JAVA_LIB . "itext.jar" . self::$COMMA
-//                . DOKU_JAVA_LIB . "jogl-all-natives-linux-i586.jar" . self::$COMMA
-//                . DOKU_JAVA_LIB . "jogl-all.jar" . self::$COMMA
-//                . DOKU_JAVA_LIB . "pdf.jar" . self::$COMMA
-//                . DOKU_JAVA_LIB . "commons-codec-1.9.jar" . self::$COMMA
-//                . DOKU_JAVA_LIB . "javax.json-1.0.2.jar";
         return $urlsValue;
     }
 
