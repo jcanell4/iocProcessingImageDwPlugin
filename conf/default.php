@@ -10,6 +10,8 @@ $conf['urlsParam']                      = 'urls';
 $conf['CookieParam']                    = 'Cookie';
 $conf['sectokParam']                    = 'sectok';
 $conf['getPdeClassesURLParam']          = 'getPdeClassesURL';
+$conf['nameSenderURLParam']             = 'nameSenderURL';
+$conf['fileSenderURLParam']             = 'fileSenderURL';
 //VALUES
 $conf['appletHeight']                   = '600';
 $conf['appletWidth']                    = '1000';
@@ -18,12 +20,8 @@ $conf['appletJarName']                  = 'lib/_java/processingManager.jar';//Pe
 $conf['getPdeClassesInfoCommand']       = 'get_pde_classes_info';
 $conf['fileSenderCommand']              = 'save_unlinked_image&do=saveImage';
 $conf['nameSenderCommand']              = 'save_unlinked_image&do=existsImage';
-$conf['urls']                           = 'core.jar,'
-                                        . 'gluegen-rt-natives-linux-i586.jar,'
-                                        . 'gluegen-rt.jar,'
-                                        . 'itext.jar,'
-                                        . 'jogl-all-natives-linux-i586.jar,'
-                                        . 'jogl-all.jar,'
-                                        . 'pdf.jar,'
-                                        . 'commons-codec-1.9.jar,'
-                                        . 'javax.json-1.0.2.jar';
+$conf['imageNameOption']                = 'imageName';
+$conf['imageNameOptionValue']           = 'imageName';
+$conf['nameOfFileOption']               = 'file';
+$conf['urls']                           = 'lib/_java/pde/classes/';
+

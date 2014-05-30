@@ -146,7 +146,8 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
         $changes['@CookieParam@'] = $this->getConf('CookieParam');
         $changes['@sectokParam@'] = $this->getConf('sectokParam');
         $changes['@getPdeClassesURLParam@'] = $this->getConf('getPdeClassesURLParam');
-
+        $changes['@fileSenderURLParam@'] = $this->getConf('fileSenderURLParam');
+        $changes['@nameSenderURLParam@'] = $this->getConf('nameSenderURLParam');
         //VALUES
         $changes['@appletHeight@'] = $this->getConf('appletHeight');
         $changes['@appletWidth@'] = $this->getConf('appletWidth');
@@ -159,6 +160,8 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
         $changes['@getPdeClassesURLValue@'] = DOKU_URL . "lib/plugins/ajaxcommand/ajax.php?call=" . $this->getConf('getPdeClassesInfoCommand');
         $changes['@fileSenderURLValue@'] = DOKU_URL . "lib/plugins/ajaxcommand/ajax.php?call=" . $this->getConf('fileSenderCommand');
         $changes['@nameSenderURLValue@'] = DOKU_URL . "lib/plugins/ajaxcommand/ajax.php?call=" . $this->getConf('nameSenderCommand');
+        $changes['@imageNameOption@'] = $this->getConf('imageNameOption');
+        $changes['@imageNameOptionValue@'] = $this->getConf('imageNameOptionValue');
     }
 
     private function setLoadAlgorithmChanges(& $changes) {
@@ -172,9 +175,12 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
     private function getUrlsValue() {
         $urls = $this->getConf('urls');
         $arrayUrls = split(',', $urls);
-        $urlsValue = DOKU_URL."lib/_java/pde/classes/";
+//        $urlsValue = DOKU_URL."lib/_java/pde/classes/";
+        $urlsValue = "";
+        $urlsLink = "";
         foreach ($arrayUrls as $key => $value) {
-            $urlsValue .= self::$COMMA.DOKU_URL."lib/_java/lib/".$value; 
+            $urlsValue .= $urlsLink.DOKU_URL.$value; 
+            $urlsLink=self::$COMMA;
         }
         return $urlsValue;
     }
