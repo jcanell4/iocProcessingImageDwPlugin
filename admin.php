@@ -91,11 +91,8 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
      * output appropriate html
      */
     function html() {
-        echo("<script>console.log('PHP: HTML');</script>");
-        $changes = array("dani"=>"dani");
-        echo("<script>console.log('PHP: HTML1');</script>");
+        $changes = array();
         $this->setParamsChanges($changes);
-        echo("<script>console.log('PHP: HTML2');</script>");
         $generateImageGenerator = new generateImage();
         $loadAlgorithmGenerator = new loadAlgorithm();
 
@@ -107,22 +104,83 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
         $loadAlgorithmGenerator->setChanges($changes);
         $loadAlgorithmHtml = $loadAlgorithmGenerator->getHtml();
         
-        echo("<script>console.log('PHP: ".$generateImageHtml."');</script>");
-//        echo("<script>console.log('PHP: ".$loadAlgorithmHtml."');</script>");
+        $dojo = "<script>
+    require([     'dojo/json'
+                , 'dojo/_base/connect'
+                , 'dojo/dom'
+                , 'dojo/dom-construct'
+                , 'dijit/registry'
+                , 'dojo/parser'
+                , 'dojo/domReady!'
+                , 'dijit/form/Button'
+                , 'dojox/form/Uploader'
+                , 'dijit/layout/TabContainer'
+                , 'dijit/layout/ContentPane'
+                , 'dojo/domReady!'
+    ], function(JSON, cn, dom, domConst, registry, parser) {
+        parser.parse();
 
+        var uploader = registry.byId('uploader');
 
+        var handleUpload = function(upl, node) {
 
-        $dojo = "<script type='text/javascript'>"
-                . "require(["
-                . "'dojo/parser', "
-                . "'dijit/layout/TabContainer', "
-                . "'dijit/layout/ContentPane'"
-                . "]);</script>";
+        };
+        var handleDnD = function(domnode, uploader) {
+            if (uploader.addDropTarget && uploader.uploadType == 'html5') {
+                domConst.create('div', {innerHTML: 'Drag and Drop files to this fieldset'}, domnode, 'last');
+                uploader.addDropTarget(domnode);
+            }
+        };
+
+        cn.connect(registry.byId('remBtn'), 'onClick', uploader, 'reset');
+        cn.connect(dojo.byId('f1'), 'submit', function(event) {
+//            alert(uploader.getFileList()[0].name);
+            var xhrArgs = {
+                url: '/dokuwiki/lib/plugins/ajaxcommand/ajax.php',
+                handleAs: 'json',
+                content: {
+                    call: 'save_pde_algorithm',
+                    do: 'existsAlgorithm',
+                    nameAlgorithm: uploader.getFileList()[0].name
+                },
+                load: function(data) {
+                    alert(data[0].type);
+                    alert(JSON.stringify(data[0].value))
+                },
+                error: function(error) {
+                    alert(error);
+                }
+            }
+
+            dojo.xhrGet(xhrArgs);
+            cn.connect(uploader, 'onComplete', function(data) {
+                //var json = JSON.parse(data, false);
+                alert('complete');
+                var div = domConst.create('div', {className: 'thumb'});
+                var span = domConst.create('span', {className: 'thumbbk'}, div);
+                span.innerHTML = '<p> type: ' + data[0].type + '</p>'
+                        + '<p> value: ' + JSON.stringify(data[0].value) + '</p>'
+
+                dom.byId('response').appendChild(div);
+            });
+        });
+//        cn.connect(registry.byId('submit'), 'onClick', uploader, 'submit');
+        handleUpload(uploader, dom.byId('response'));
+        if (require.has('file-multiple')) {
+            handleDnD(uploader.domNode.parentNode, uploader);
+        }
+    });
+</script>  ";
+        
+        
+        
         $html = ""
                 . "<div style='width: 800; height: 650px;'>"
                 . "<div data-dojo-type='dijit/layout/TabContainer' style='width:100%; height: 100%;'>"
-                . "<div data-dojo-type='dijit/layout/ContentPane' title='Generacio de imatges' id='generateImage' >" . $generateImageHtml . "</div>"
-                . "<div data-dojo-type='dijit/layout/ContentPane' title='Carrega de algorismes' id='loadAlgorithm'>" . $loadAlgorithmHtml . "</div>"
+                . "<div data-dojo-type='dijit/layout/ContentPane' title='Generacio de imatges'  >Hola k ase</div>"
+                . "<div data-dojo-type='dijit/layout/ContentPane' title='Carrega de algorismes' >" . $loadAlgorithmHtml . "</div>"
+                
+
 //                . "<div data-dojo-type='dijit/layout/ContentPane' title='Galeria de imatges' id='galleryImage'>".$generate_html."</div>"
                 . "</div>"
                 . "</div>"
@@ -131,13 +189,9 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
     }
 
     private function setParamsChanges(& $changes) {
-        echo("<script>console.log('PHP: HTML3');</script>");
         $this->setGenerateImageChanges($changes);
-        echo("<script>console.log('PHP: HTML4');</script>");
         $this->setLoadAlgorithmChanges($changes);
-        echo("<script>console.log('PHP: HTML5');</script>");
         $this->setGalleryImageChanges($changes);
-        echo("<script>console.log('PHP: HTML6');</script>");
     }
 
     private function setGenerateImageChanges(& $changes) {
