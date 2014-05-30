@@ -18,6 +18,12 @@ $conf['appletJarName']                  = 'lib/_java/processingManager.jar';//Pe
 $conf['getPdeClassesInfoCommand']       = 'get_pde_classes_info';
 $conf['fileSenderCommand']              = 'save_unlinked_image&do=saveImage';
 $conf['nameSenderCommand']              = 'save_unlinked_image&do=existsImage';
-$conf['urls']                           = 'core.jar,gluegen-rt-natives-linux-i586.jar,gluegen-rt.jar,'
-                                        . 'itext.jar,jogl-all-natives-linux-i586.jar,jogl-all.jar,'
-                                        . 'pdf.jar,commons-codec-1.9.jar,javax.json-1.0.2.jar';
+$conf['urls']                           = 'core.jar,'
+                                        . 'gluegen-rt-natives-linux-i586.jar,'
+                                        . 'gluegen-rt.jar,'
+                                        . 'itext.jar,'
+                                        . 'jogl-all-natives-linux-i586.jar,'
+                                        . 'jogl-all.jar,'
+                                        . 'pdf.jar,'
+                                        . 'commons-codec-1.9.jar,'
+                                        . 'javax.json-1.0.2.jar';
