@@ -1,1 +1,45 @@
-<p>LOAD_ALGORITHM con un texto de prueba de @dani@</p>
+<style type="text/css">
+    .processingField {
+        margin-bottom: 5px;
+    }
+
+    .processingField .labelcol {
+        float:left; 
+        width: 90px; 
+        text-align: right;
+    }
+    .processingField .labelcol label {
+        font-weight: bold;
+    }
+</style>
+<form id="f1" name="f1" method="post" action="/dokuwiki/lib/plugins/ajaxcommand/ajax.php?call=commandreport" id="myForm2" enctype="multipart/form-data">
+    <fieldset style="text-align: left; width:95%; height: 95%;" >
+        <legend>Formulari per carregar algorismes de Processing</legend>
+        <input type="hidden" name="do" id="doField"/>
+        <div class="processingField">
+            <span class="labelcol">
+                <label for="uploader">Fitxer: </label>
+            </span>
+            <div id="uploader" title="Pots arrosegar el fitxer fins aquí" data-dojo-type="dojox/form/Uploader" data-dojo-props="name:'uploadedfile',showInput:'before',isDebug:true">Selecciona</div>
+            <span>Pots arrosegar el fitxer fins aquí</span>
+        </div>
+        <div class="processingField">
+            <span class="labelcol">
+                <label for="nom_field" >Nom: </label>
+            </span>
+            <input style="margin-left: 3px" title="Introdueix un nom a l'algorisme" type="text" name="nom" id="nomField" value="Dani" aria-label="nom" />
+        </div>
+        <div class="processingField">
+            <span class="labelcol">
+                <label for="descripcio_field">Descripció: </label>
+            </span>
+            <textarea id="descripcioField" rows="5" style="width: 50%; margin-left: 3px;" name="descripcio" aria-label="descripcio">Descripcio dani</textarea>
+        </div>
+        <div class="processingField">
+            <span class="labelcol">&nbsp;
+            </span>
+            <input type="button" id="remBtn" label="Neteja" data-dojo-type="dijit/form/Button" />
+            <input type="submit" id="submit" label="Carrega" data-dojo-type="dijit/form/Button" />
+        </div>
+    </fieldset>
+</form>
