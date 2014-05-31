@@ -12,6 +12,78 @@
         font-weight: bold;
     }
 </style>
+<script>
+    require([   
+          'dojo/dom'
+        , 'dojo/_base/xhr'
+        , 'dojo/json'
+        , 'dojo/_base/connect'
+        , 'dojo/dom-construct'
+        , 'dijit/registry'
+        , 'dojo/ready'
+        /*, 'dojo/parser'*/
+        , 'dojo/domReady!'
+        , 'dijit/form/Button'
+        , 'dojox/form/Uploader'
+        , 'dijit/layout/TabContainer'
+        , 'dijit/layout/ContentPane'
+        , 'dojo/domReady!'
+    ], function(dom, xhr, JSON, cn, domConst, registry, ready/*, parser*/) {
+        ready(function(){
+            //parser.parse();
+
+            var uploader = registry.byId('uploader');
+
+            var handleUpload = function(upl, node) {
+
+            };
+            var handleDnD = function(domnode, uploader) {
+                if (uploader.addDropTarget && uploader.uploadType == 'html5') {
+                    domConst.create('div', {innerHTML: 'Drag and Drop files to this fieldset'}, domnode, 'last');
+                    uploader.addDropTarget(domnode);
+                }
+            };
+
+            cn.connect(registry.byId('remBtn'), 'onClick', uploader, 'reset');
+            cn.connect(dom.byId('f1'), 'submit', function(event) {
+    //            alert(uploader.getFileList()[0].name);
+                var xhrArgs = {
+                    url: '/dokuwiki/lib/plugins/ajaxcommand/ajax.php',
+                    handleAs: 'json',
+                    content: {
+                        call: 'save_pde_algorithm',
+                        do: 'existsAlgorithm',
+                        nameAlgorithm: uploader.getFileList()[0].name
+                    },
+                    load: function(data) {
+                        alert(data[0].type);
+                        alert(JSON.stringify(data[0].value))
+                    },
+                    error: function(error) {
+                        alert(error);
+                    }
+                }
+
+                xhr.get(xhrArgs);
+                cn.connect(uploader, 'onComplete', function(data) {
+                    //var json = JSON.parse(data, false);
+                    alert('complete');
+                    var div = domConst.create('div', {className: 'thumb'});
+                    var span = domConst.create('span', {className: 'thumbbk'}, div);
+                    span.innerHTML = '<p> type: ' + data[0].type + '</p>'
+                            + '<p> value: ' + JSON.stringify(data[0].value) + '</p>'
+
+                    dom.byId('response').appendChild(div);
+                });
+            });
+    //        cn.connect(registry.byId('submit'), 'onClick', uploader, 'submit');
+            handleUpload(uploader, dom.byId('response'));
+            if (require.has('file-multiple')) {
+                handleDnD(uploader.domNode.parentNode, uploader);
+            }
+        });
+    });
+</script>
 <form id="f1" name="f1" method="post" action="/dokuwiki/lib/plugins/ajaxcommand/ajax.php?call=commandreport" id="myForm2" enctype="multipart/form-data">
     <fieldset style="text-align: left; width:95%; height: 95%;" >
         <legend>Formulari per carregar algorismes de Processing</legend>
