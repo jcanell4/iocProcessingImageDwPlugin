@@ -37,6 +37,7 @@ if (!defined('DOKU_COMMAND'))
 require_once DOKU_INC . 'inc/common.php';
 require_once DOKU_PROCESSING . 'generators/generateImage.php';
 require_once DOKU_PROCESSING . 'generators/loadAlgorithm.php';
+require_once DOKU_PROCESSING . 'generators/galleryImage.php';
 
 /**
  * All DokuWiki plugins to extend the admin function
@@ -93,17 +94,21 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
     function html() {
         $changes = array();
         $this->setParamsChanges($changes);
+
         $generateImageGenerator = new generateImage();
         $loadAlgorithmGenerator = new loadAlgorithm();
+        $galleryImageGenerator = new galleryImage();
 
 
         $generateImageGenerator->setChanges($changes);
         $generateImageHtml = $generateImageGenerator->getHtml();
 
-
         $loadAlgorithmGenerator->setChanges($changes);
         $loadAlgorithmHtml = $loadAlgorithmGenerator->getHtml();
-        
+
+        $galleryImageGenerator->setChanges($changes);
+        $galleryImageHtml = $galleryImageGenerator->getHtml();
+
         $dojo = "<script type='text/javascript'>"
                 . "require(["
                 . "'dojo/parser', "
@@ -113,9 +118,9 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
         $html = ""
                 . "<div style='width: 800; height: 650px;'>"
                 . "<div data-dojo-type='dijit/layout/TabContainer' style='width:100%; height: 100%;'>"
-                . "<div data-dojo-type='dijit/layout/ContentPane' title='Generacio de imatges' id='generateImage' >" . $generateImageHtml . "</div>"
-                . "<div data-dojo-type='dijit/layout/ContentPane' title='Carrega de algorismes' id='loadAlgorithm'>" . $loadAlgorithmHtml . "</div>"
-//                . "<div data-dojo-type='dijit/layout/ContentPane' title='Galeria de imatges' id='galleryImage'>".$generate_html."</div>"
+                . "<div data-dojo-type='dijit/layout/ContentPane' title='Generació d'imatges' id='generateImage' >" . $generateImageHtml . "</div>"
+                . "<div data-dojo-type='dijit/layout/ContentPane' title='Càrrega d'algorismes' id='loadAlgorithm'>" . $loadAlgorithmHtml . "</div>"
+                . "<div data-dojo-type='dijit/layout/ContentPane' title='Galeria de imatges' id='galleryImage'>" . $galleryImageHtml . "</div>"
                 . "</div>"
                 . "</div>"
                 . "";
@@ -157,7 +162,20 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
     }
 
     private function setGalleryImageChanges(& $changes) {
-        
+        $changes['@galleryImage@'] = $this->getGalleryImage();
+    }
+
+    private function getGalleryImage() {
+        global $conf;
+        $dir = $conf['mediadir'] . $this->getConf('processingImageRepository');
+        $arrayDir = scandir($dir);
+        $html = "";
+        foreach ($arrayDir as $file) {
+            if ($file == '.' | $file == '..') continue;
+            $html .="<div><input type='checkbox' name=''/><img style='width:100px;heigth:100px;' src='".$dir.$file."' /></div>";
+        }
+//        closedir($dir);
+        return $html;
     }
 
     private function getUrlsValue() {
@@ -167,8 +185,8 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
         $urlsValue = "";
         $urlsLink = "";
         foreach ($arrayUrls as $key => $value) {
-            $urlsValue .= $urlsLink.DOKU_URL.$value; 
-            $urlsLink=self::$COMMA;
+            $urlsValue .= $urlsLink . DOKU_URL . $value;
+            $urlsLink = self::$COMMA;
         }
         return $urlsValue;
     }

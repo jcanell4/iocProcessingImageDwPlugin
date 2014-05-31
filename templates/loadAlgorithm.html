@@ -56,6 +56,9 @@
             };
 
             cn.connect(registry.byId('remBtn'), 'onClick', uploader, 'reset');
+            cn.connect(uploader, 'onProgress', function(event) {event.stopPropagation();event.stop();});
+            cn.connect(uploader, 'onSubmit', function(event) {event.stopPropagation();event.stop();});
+            cn.connect(uploader, 'onBegin', function() {return false;});
             cn.connect(dom.byId('f1'), 'submit', function(event) {
 //                alert("submit form");
                 event.stopPropagation();
@@ -91,7 +94,9 @@
                 }
                 xhr.get(xhrArgs);
             });
-            //cn.connect(registry.byId('submit'), 'onClick', uploader, 'submit');
+            cn.connect(registry.byId('submit'), 'onClick', function(){
+                
+            });
             //handleUpload(uploader, dom.byId('response'));
             if (require.has('file-multiple')) {
                 handleDnD(uploader.domNode.parentNode, uploader);

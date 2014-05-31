@@ -4,7 +4,8 @@
  *
  * @author Daniel Criado Casas <dani.criado.casas@gmail.com> 
  */
-
+//com que tb s'utilitza en el ajaxcommand, s'hauria de possar en un conf mes general?
+$conf['processingImageRepository']      = '/repository/pde/';  // repository for generated images using pde algorithms
 //PARAMS
 $conf['urlsParam']                      = 'urls';
 $conf['CookieParam']                    = 'Cookie';
