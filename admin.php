@@ -91,11 +91,8 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
      * output appropriate html
      */
     function html() {
-        echo("<script>console.log('PHP: HTML');</script>");
-        $changes = array("dani"=>"dani");
-        echo("<script>console.log('PHP: HTML1');</script>");
+        $changes = array();
         $this->setParamsChanges($changes);
-        echo("<script>console.log('PHP: HTML2');</script>");
         $generateImageGenerator = new generateImage();
         $loadAlgorithmGenerator = new loadAlgorithm();
 
@@ -107,11 +104,6 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
         $loadAlgorithmGenerator->setChanges($changes);
         $loadAlgorithmHtml = $loadAlgorithmGenerator->getHtml();
         
-//        echo("<script>console.log('PHP: ".$generateImageHtml."');</script>");
-//        echo("<script>console.log('PHP: ".$loadAlgorithmHtml."');</script>");
-
-
-
         $dojo = "<script type='text/javascript'>"
                 . "require(["
                 . "'dojo/parser', "
@@ -131,13 +123,9 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
     }
 
     private function setParamsChanges(& $changes) {
-        echo("<script>console.log('PHP: HTML3');</script>");
         $this->setGenerateImageChanges($changes);
-        echo("<script>console.log('PHP: HTML4');</script>");
         $this->setLoadAlgorithmChanges($changes);
-        echo("<script>console.log('PHP: HTML5');</script>");
         $this->setGalleryImageChanges($changes);
-        echo("<script>console.log('PHP: HTML6');</script>");
     }
 
     private function setGenerateImageChanges(& $changes) {

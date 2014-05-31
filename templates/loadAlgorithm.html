@@ -13,61 +13,33 @@
     }
 </style>
 <script>
-    require([   
-          'dojo/dom'
-        , 'dojo/_base/xhr'
-        , 'dojo/json'
-        , 'dojo/_base/connect'
-        , 'dojo/dom-construct'
-        , 'dijit/registry'
-        , 'dojo/ready'
-        /*, 'dojo/parser'*/
-        , 'dojo/domReady!'
-        , 'dijit/form/Button'
-        , 'dojox/form/Uploader'
-        , 'dijit/layout/TabContainer'
-        , 'dijit/layout/ContentPane'
-        , 'dojo/domReady!'
-    ], function(dom, xhr, JSON, cn, domConst, registry, ready/*, parser*/) {
-        ready(function(){
+    require([
+        'dojo/dom'
+                , 'dojo/_base/xhr'
+                , 'dojo/json'
+                , 'dojo/_base/connect'
+                , 'dojo/dom-construct'
+                , 'dijit/registry'
+                , 'dojo/ready'
+                /*, 'dojo/parser'*/
+                , 'dojo/dom-attr'
+                , 'dojo/domReady!'
+                , 'dijit/form/Button'
+                , 'dojox/form/Uploader'
+                , 'dijit/layout/TabContainer'
+                , 'dijit/layout/ContentPane'
+                , 'dojo/domReady!'
+    ], function(dom, xhr, JSON, cn, domConst, registry, ready/*, parser*/, domAttr) {
+        ready(function() {
             //parser.parse();
 
             var uploader = registry.byId('uploader');
 
             var handleUpload = function(upl, node) {
-
-            };
-            var handleDnD = function(domnode, uploader) {
-                if (uploader.addDropTarget && uploader.uploadType == 'html5') {
-                    domConst.create('div', {innerHTML: 'Drag and Drop files to this fieldset'}, domnode, 'last');
-                    uploader.addDropTarget(domnode);
-                }
-            };
-
-            cn.connect(registry.byId('remBtn'), 'onClick', uploader, 'reset');
-            cn.connect(dom.byId('f1'), 'submit', function(event) {
-    //            alert(uploader.getFileList()[0].name);
-                var xhrArgs = {
-                    url: '/dokuwiki/lib/plugins/ajaxcommand/ajax.php',
-                    handleAs: 'json',
-                    content: {
-                        call: 'save_pde_algorithm',
-                        do: 'existsAlgorithm',
-                        nameAlgorithm: uploader.getFileList()[0].name
-                    },
-                    load: function(data) {
-                        alert(data[0].type);
-                        alert(JSON.stringify(data[0].value))
-                    },
-                    error: function(error) {
-                        alert(error);
-                    }
-                }
-
-                xhr.get(xhrArgs);
-                cn.connect(uploader, 'onComplete', function(data) {
+                cn.connect(upl, 'onComplete', function(data) {
                     //var json = JSON.parse(data, false);
                     alert('complete');
+                    alert(JSON.stringify(data[0].value));
                     var div = domConst.create('div', {className: 'thumb'});
                     var span = domConst.create('span', {className: 'thumbbk'}, div);
                     span.innerHTML = '<p> type: ' + data[0].type + '</p>'
@@ -75,16 +47,59 @@
 
                     dom.byId('response').appendChild(div);
                 });
+            };
+            var handleDnD = function(domnode, uploader) {
+                if (uploader.addDropTarget && uploader.uploadType == 'html5') {
+//                    domConst.create('div', {innerHTML: 'Drag and Drop files to this fieldset'}, domnode, 'last');
+                    uploader.addDropTarget(domnode);
+                }
+            };
+
+            cn.connect(registry.byId('remBtn'), 'onClick', uploader, 'reset');
+            cn.connect(dom.byId('f1'), 'submit', function(event) {
+//                alert("submit form");
+                event.stopPropagation();
+                var xhrArgs = {
+                    url: '/dokuwiki/lib/plugins/ajaxcommand/ajax.php',
+                    handleAs: 'json',
+                    sync:'true',
+                    content: {
+                        call: 'save_pde_algorithm',
+                        do: 'existsAlgorithm',
+                        algorithmName: uploader.getFileList()[0].name
+                    },
+                    load: function(data) {
+                        var code = data[0].value.code;
+                        var form = dojo.byId("f1");
+                        var action = domAttr.get(form, 'action');
+                        var do_param = "";
+                        alert(data[0].value.code);
+                        if (code == 2) {
+                            do_param = "appendAlgorithm";
+                        }else {
+                            //TODO
+                        }
+//                        alert(action+"&do="+do_param);
+                        domAttr.set(form, 'action', action+"&do="+do_param);
+                        alert(domAttr.get(form, 'action'));
+                        uploader.submit();
+                        handleUpload(uploader,dom.byId('response'))
+                    },
+                    error: function(error) {
+                        alert(error);
+                    }
+                }
+                xhr.get(xhrArgs);
             });
-    //        cn.connect(registry.byId('submit'), 'onClick', uploader, 'submit');
-            handleUpload(uploader, dom.byId('response'));
+            //cn.connect(registry.byId('submit'), 'onClick', uploader, 'submit');
+            //handleUpload(uploader, dom.byId('response'));
             if (require.has('file-multiple')) {
                 handleDnD(uploader.domNode.parentNode, uploader);
             }
         });
     });
 </script>
-<form id="f1" name="f1" method="post" action="/dokuwiki/lib/plugins/ajaxcommand/ajax.php?call=commandreport" id="myForm2" enctype="multipart/form-data">
+<form id="f1" name="f1" method="post" action="/dokuwiki/lib/plugins/ajaxcommand/ajax.php?call=save_pde_algorithm" enctype="multipart/form-data">
     <fieldset style="text-align: left; width:95%; height: 95%;" >
         <legend>Formulari per carregar algorismes de Processing</legend>
         <input type="hidden" name="do" id="doField"/>
