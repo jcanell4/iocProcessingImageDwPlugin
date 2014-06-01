@@ -1,13 +1,79 @@
-<!--<script type='text/javascript'>
-    require(["dojox/layout/ScrollPane"], function(ScrollPane) {
-        var scrollPane = new dojox.layout.ScrollPane({
-            orientation: "vertical",
-            style:"width:125px; height:200px; border:1px solid; overflow:auto;"
-        }, "some");
-    });
-</script>-->
+<script type="text/javascript">
+    require(["dijit/Tree", "dijit/tree/ObjectStoreModel", "dojo/store/JsonRest", "dojo/dom-attr"], function(Tree, ObjectStoreModel, JsonRest, domAttr) {
+        var nodeId = "treeContentPane"
+        var commandUrl = "/dokuwiki/lib/plugins/ajaxcommand/ajaxrest.php/ns_tree_rest/";
 
-<div data-dojo-type='dijit/layout/TabContainer' style="width:95%; heigth:95%;">
-    <div style="width:50%;heigth:100%; float:left;" data-dojo-type='dijit/layout/ContentPane' title="Galeria">@galleryImage@</div>
-    <div data-dojo-type='dijit/layout/ContentPane' title="Tree">tree</div>
-</div>
+
+
+        var myStore = new JsonRest({
+            target: commandUrl
+            , getChildren: function(object) {
+                return this.get(object.id).then(
+                        function(fullObject) {
+                            return fullObject.children;
+                        }
+                , function(error) {
+                    console.log(error);
+                }
+                );
+            }
+        });
+
+        var myModel = new ObjectStoreModel({
+            store: myStore
+            , getRoot: function(onItem) {
+                this.store.get("root").then(onItem);
+            }
+            , mayHaveChildren: function(object) {
+                return object.type === "d";
+            }
+            , getLabel: function(object) {
+                return object.name;
+            }
+        });
+
+        var tree = new Tree({
+            id: "gallery_nTree"
+            , title: "My tree"
+            , model: myModel
+            , persist: false
+            , onClick: function(item) {
+                if (!this.model.mayHaveChildren(item)) {
+                    nsTree.sendRequest("id=" + item.id);
+                } else {
+                    var inp = dojo.byId("dirname");
+                    domAttr.set(inp, 'value', item.id);
+                }
+            }
+        }, nodeId);
+        tree.startup();
+    });
+</script>
+
+<style type="text/css">
+    .imageGallery{
+        text-align: center;
+        float:left;
+        padding: 5px;
+        border: 1px solid #759dc0;
+        margin: 2px;
+        width: 110px;
+        height: 140px;
+    }
+    .imageGallery img {
+        width: 100px;
+        height: 100px;
+        padding-top: 5px;
+    }
+</style>
+<form>
+    <div data-dojo-type='dijit/layout/TabContainer' style="width:95%; heigth:95%;">
+        <div style="width:50%;heigth:100%; float:left;" data-dojo-type='dijit/layout/ContentPane' title="Galeria">@galleryImage@</div>
+        <div data-dojo-type='dijit/layout/ContentPane' title="Tree">
+            <div style="width:95%; height:95%;">
+                <div id="treeContentPane" style="width:25%;float:left;"></div>
+                <div id="treeFrom" style="float:left;"><input type="text" name="dirname" id="dirname"/></div>
+            </div>
+        </div>
+    </div>
+</form>

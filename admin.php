@@ -166,13 +166,16 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
     }
 
     private function getGalleryImage() {
-        global $conf;
-        $dir = $conf['mediadir'] . $this->getConf('processingImageRepository');
+        $dir = "data/media" . $this->getConf('processingImageRepository');
         $arrayDir = scandir($dir);
         $html = "";
         foreach ($arrayDir as $file) {
+            $name = substr($file, 0, -4);//Li treu la extensio .pde
             if ($file == '.' | $file == '..') continue;
-            $html .="<div><input type='checkbox' name=''/><img style='width:100px;heigth:100px;' src='".$dir.$file."' /></div>";
+            $html .="<div class='imageGallery'>"
+                    . "<div class='imageCheckbox'><input type='checkbox' name='checkbox_".$name."'/></div>"
+                    . "<img src='".$dir.$file."' />"
+                    . "<div class='imageLink'><a href='".DOKU_URL.$dir.$file."' target='_blank'>Veure Original</a></div></div>";
         }
 //        closedir($dir);
         return $html;
