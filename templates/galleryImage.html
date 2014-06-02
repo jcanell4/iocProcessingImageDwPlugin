@@ -8,8 +8,10 @@
                 , "dojo/dom"
                 , 'dojo/_base/connect'
                 , "dijit/registry"
-                , "dojo/_base/declare"], function(Tree, RadioButton, ObjectStoreModel, JsonRest,
-            domAttr, dom, cn, registry, declare) {
+                , "dojo/_base/declare"
+                , "dojo/json"
+    ], function(Tree, RadioButton, ObjectStoreModel, JsonRest,
+            domAttr, dom, cn, registry, declare, JSON) {
         var nodeId = "treeContentPane"
         var commandUrl = "lib/plugins/ajaxcommand/ajaxrest.php/ns_tree_rest/@sectokValue@/d/";
 
@@ -69,13 +71,29 @@
         }, nodeId);
         tree.startup();
         cn.subscribe("/item/clicked", function(value) {
-            var inp = dom.byId("dirname");
+            var inp = dom.byId("projectPath");
             if (value.control.checked) {
                 domAttr.set(inp, 'value', value.item.id);
             }
         });
-        
-//        cn.connect(dom.byId("iSubmit"), "onClick", function(event){alert(dom.byId("dijit_form_RadioButton_1").value)})
+
+        var form = dojo.byId("fGallery");
+
+        dojo.connect(form, "onsubmit", function(event) {
+            dojo.stopEvent(event);
+            var xhrArgs = {
+                form: form,
+                handleAs: "json",
+                load: function(data) {
+                    alert(data[0].type);
+                    alert(JSON.stringify(data[0].value));
+                },
+                error: function(error) {
+                    alert(error);
+                }
+            }
+            var deferred = dojo.xhrPost(xhrArgs);
+        });
     });
 </script>
 
@@ -103,15 +121,20 @@
     }
 
 </style>
-<form id="igForm" name="igForm" method="post" action="/dokuwiki/lib/plugins/ajaxcommand/ajax.php?call=commandreport">
-    <div class="iImporter" data-dojo-type='dijit/layout/TabContainer'>
-        <div data-dojo-type='dijit/layout/ContentPane' title="Galeria" >@galleryImage@</div>
-        <div data-dojo-type='dijit/layout/ContentPane' title="Tree" style="width:300px;">
+<form id="fGallery" name="igForm" method="post" action="/dokuwiki/lib/plugins/ajaxcommand/ajax.php?call=copy_image_to_project">
+    <div class="iImporter">
+        <div data-dojo-type='dijit/layout/ContentPane' title="Galeria" style="float:left; width:50%; height: 600px;">@galleryImage@</div>
+        <div data-dojo-type='dijit/layout/ContentPane' title="Tree" style="float:left; width: 30%">
             <div>
-                <div style="width:300px;">
-                    <div id="treeContentPane" ></div>
+                <div id="treeContentPane"></div>
+            </div>
+        </div>
+        <div data-dojo-type='dijit/layout/ContentPane' title="Tree">
+            <div>
+                <div id="treeFrom" style="margin-top:10px;">
+                    <input type="hidden" id="projectPath" name="projectPath"/>
+                    <input type="submit" id="iSubmit" label="Copia imatges" title="Copia les imatges seleccionades en el directori seleccionat" data-dojo-type="dijit/form/Button" />
                 </div>
-                <div id="treeFrom" style="margin-top:10px;"><input type="submit" id="iSubmit" label="Copia" data-dojo-type="dijit/form/Button" /></div>
             </div>
         </div>
     </div>

@@ -118,9 +118,9 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
         $html = ""
                 . "<div style='width: 800; height: 650px;'>"
                 . "<div data-dojo-type='dijit/layout/TabContainer' style='width:100%; height: 100%;'>"
-                . "<div data-dojo-type='dijit/layout/ContentPane' title='Generació d'imatges' id='generateImage' >" . $generateImageHtml . "</div>"
-                . "<div data-dojo-type='dijit/layout/ContentPane' title='Càrrega d'algorismes' id='loadAlgorithm'>" . $loadAlgorithmHtml . "</div>"
-                . "<div data-dojo-type='dijit/layout/ContentPane' title='Galeria de imatges' id='galleryImage'>" . $galleryImageHtml . "</div>"
+                . "<div data-dojo-type='dijit/layout/ContentPane' title='Generació' id='generateImage' >" . $generateImageHtml . "</div>"
+                . "<div data-dojo-type='dijit/layout/ContentPane' title='Càrrega' id='loadAlgorithm'>" . $loadAlgorithmHtml . "</div>"
+                . "<div data-dojo-type='dijit/layout/ContentPane' title='Galeria' id='galleryImage'>" . $galleryImageHtml . "</div>"
                 . "</div>"
                 . "</div>"
                 . "";
@@ -176,11 +176,11 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
             foreach ($arrayDir as $file) {
                 $name = substr($file, 0, -4); //Li treu la extensio .pde
                 $html .="<div class='iGallery'>"
-                        . "<div class='iCheckbox'><input type='checkbox' name='checkbox_" . $name . "'/></div>"
+                        . "<div class='iCheckbox'><input type='checkbox' name='checkbox_" . $name . "' value='" . $file . "'/></div>"
                         . "<img src='" . $dir . $file . "' />"
                         . "<div class='iLink'><a href='" . DOKU_URL . $dir . $file . "' target='_blank'>Veure Original</a></div></div>";
             }
-        }else {
+        } else {
             $html = "<div>No existeix cap imatge en el repository.</div>";
         }
         closedir($arrayDir);
