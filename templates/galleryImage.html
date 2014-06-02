@@ -1,15 +1,15 @@
 <script type="text/javascript">
     require([
-          "dijit/Tree"
-        , "dijit/form/RadioButton"
-        , "dijit/tree/ObjectStoreModel"
-        , "dojo/store/JsonRest"
-        , "dojo/dom-attr"
-        , "dojo/dom"
-        , 'dojo/_base/connect'
-        , "dijit/registry"
-        , "dojo/_base/declare"], function(Tree, RadioButton, ObjectStoreModel, JsonRest, 
-                                domAttr, dom, cn, registry, declare) {
+        "dijit/Tree"
+                , "dijit/form/RadioButton"
+                , "dijit/tree/ObjectStoreModel"
+                , "dojo/store/JsonRest"
+                , "dojo/dom-attr"
+                , "dojo/dom"
+                , 'dojo/_base/connect'
+                , "dijit/registry"
+                , "dojo/_base/declare"], function(Tree, RadioButton, ObjectStoreModel, JsonRest,
+            domAttr, dom, cn, registry, declare) {
         var nodeId = "treeContentPane"
         var commandUrl = "lib/plugins/ajaxcommand/ajaxrest.php/ns_tree_rest/@sectokValue@/d/";
 
@@ -54,26 +54,28 @@
                 var tnode = new MyTreeNode(args);
                 tnode.labelNode.innerHTML = args.label;
 
-                var cb = new RadioButton({'name':"radio_gallery_nTree"});
+                var cb = new RadioButton({'name': "radio_gallery_nTree"});
                 cb.placeAt(tnode.labelNode, "first");
 
                 cn.connect(cb, "onChange", function() {
                     var treeNode = registry.getEnclosingWidget(this.domNode.parentNode);
                     cn.publish("/item/clicked", [{
-                        "control": this,
-                        "item": treeNode.item}]);
+                            "control": this,
+                            "item": treeNode.item}]);
                 });
 
                 return tnode;
             }
         }, nodeId);
         tree.startup();
-        cn.subscribe("/item/clicked", function(value){
+        cn.subscribe("/item/clicked", function(value) {
             var inp = dom.byId("dirname");
-            if(value.control.checked){
-                domAttr.set(inp, 'value', value.item.id);        
+            if (value.control.checked) {
+                domAttr.set(inp, 'value', value.item.id);
             }
         });
+        
+//        cn.connect(dom.byId("iSubmit"), "onClick", function(event){alert(dom.byId("dijit_form_RadioButton_1").value)})
     });
 </script>
 
@@ -99,15 +101,17 @@
         height: 100px;
         padding-top: 5px;
     }
-    
+
 </style>
-<form>
-    <div class="iImporter" data-dojo-type='dijit/layout/TabContainer' style="width:95%; heigth:100%;">
-        <div style="width:50%;heigth:100%; float:left;" data-dojo-type='dijit/layout/ContentPane' title="Galeria">@galleryImage@</div>
-        <div data-dojo-type='dijit/layout/ContentPane' title="Tree" style="width:50%;heigth:100%; float:left;">
-            <div style="width:95%; height:100%;">
-                <div id="treeContentPane" style="width:25%;float:left;"></div>
-                <div id="treeFrom" style="float:left;"><input type="text" name="dirname" id="dirname"/></div>
+<form id="igForm" name="igForm" method="post" action="/dokuwiki/lib/plugins/ajaxcommand/ajax.php?call=commandreport">
+    <div class="iImporter" data-dojo-type='dijit/layout/TabContainer'>
+        <div data-dojo-type='dijit/layout/ContentPane' title="Galeria" >@galleryImage@</div>
+        <div data-dojo-type='dijit/layout/ContentPane' title="Tree" style="width:300px;">
+            <div>
+                <div style="width:300px;">
+                    <div id="treeContentPane" ></div>
+                </div>
+                <div id="treeFrom" style="margin-top:10px;"><input type="submit" id="iSubmit" label="Copia" data-dojo-type="dijit/form/Button" /></div>
             </div>
         </div>
     </div>

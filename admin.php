@@ -169,13 +169,19 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
         $dir = "data/media" . $this->getConf('processingImageRepository');
         $arrayDir = scandir($dir);
         $html = "";
-        foreach ($arrayDir as $file) {
-            $name = substr($file, 0, -4);//Li treu la extensio .pde
-            if ($file == '.' | $file == '..') continue;
-            $html .="<div class='iGallery'>"
-                    . "<div class='iCheckbox'><input type='checkbox' name='checkbox_".$name."'/></div>"
-                    . "<img src='".$dir.$file."' />"
-                    . "<div class='iLink'><a href='".DOKU_URL.$dir.$file."' target='_blank'>Veure Original</a></div></div>";
+        if (count($arrayDir) > 2) {
+            unset($arrayDir[0]);
+            unset($arrayDir[1]);
+            $arrayDir = array_values($arrayDir);
+            foreach ($arrayDir as $file) {
+                $name = substr($file, 0, -4); //Li treu la extensio .pde
+                $html .="<div class='iGallery'>"
+                        . "<div class='iCheckbox'><input type='checkbox' name='checkbox_" . $name . "'/></div>"
+                        . "<img src='" . $dir . $file . "' />"
+                        . "<div class='iLink'><a href='" . DOKU_URL . $dir . $file . "' target='_blank'>Veure Original</a></div></div>";
+            }
+        }else {
+            $html = "<div>No existeix cap imatge en el repository.</div>";
         }
         closedir($arrayDir);
         return $html;
