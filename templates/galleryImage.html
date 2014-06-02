@@ -1,7 +1,17 @@
 <script type="text/javascript">
-    require(["dijit/Tree", "dijit/tree/ObjectStoreModel", "dojo/store/JsonRest", "dojo/dom-attr"], function(Tree, ObjectStoreModel, JsonRest, domAttr) {
+    require([
+          "dijit/Tree"
+        , "dijit/form/RadioButton"
+        , "dijit/tree/ObjectStoreModel"
+        , "dojo/store/JsonRest"
+        , "dojo/dom-attr"
+        , "dojo/dom"
+        , 'dojo/_base/connect'
+        , "dijit/registry"
+        , "dojo/_base/declare"], function(Tree, RadioButton, ObjectStoreModel, JsonRest, 
+                                domAttr, dom, cn, registry, declare) {
         var nodeId = "treeContentPane"
-        var commandUrl = "/dokuwiki/lib/plugins/ajaxcommand/ajaxrest.php/ns_tree_rest/";
+        var commandUrl = "lib/plugins/ajaxcommand/ajaxrest.php/ns_tree_rest/@sectokValue@/d/";
 
 
 
@@ -14,15 +24,14 @@
                         }
                 , function(error) {
                     console.log(error);
-                }
-                );
+                });
             }
         });
 
         var myModel = new ObjectStoreModel({
             store: myStore
             , getRoot: function(onItem) {
-                this.store.get("root").then(onItem);
+                this.store.get("_").then(onItem);
             }
             , mayHaveChildren: function(object) {
                 return object.type === "d";
@@ -32,26 +41,51 @@
             }
         });
 
+        var MyTreeNode = declare(Tree._TreeNode, {
+            _setLabelAttr: {node: "labelNode", type: "innerHTML"}
+        });
         var tree = new Tree({
             id: "gallery_nTree"
             , title: "My tree"
             , model: myModel
             , persist: false
-            , onClick: function(item) {
-                if (!this.model.mayHaveChildren(item)) {
-                    nsTree.sendRequest("id=" + item.id);
-                } else {
-                    var inp = dojo.byId("dirname");
-                    domAttr.set(inp, 'value', item.id);
-                }
+            , showRoot: false
+            , _createTreeNode: function(args) {
+                var tnode = new MyTreeNode(args);
+                tnode.labelNode.innerHTML = args.label;
+
+                var cb = new RadioButton({'name':"radio_gallery_nTree"});
+                cb.placeAt(tnode.labelNode, "first");
+
+                cn.connect(cb, "onChange", function() {
+                    var treeNode = registry.getEnclosingWidget(this.domNode.parentNode);
+                    cn.publish("/item/clicked", [{
+                        "control": this,
+                        "item": treeNode.item}]);
+                });
+
+                return tnode;
             }
         }, nodeId);
         tree.startup();
+        cn.subscribe("/item/clicked", function(value){
+            var inp = dom.byId("dirname");
+            if(value.control.checked){
+                domAttr.set(inp, 'value', value.item.id);        
+            }
+        });
     });
 </script>
 
 <style type="text/css">
-    .imageGallery{
+    .iImporter .treeSelected{
+        background-color: #e25a5a;
+        background-image: linear-gradient(rgba(255, 255, 255, 0.698) 0%, rgba(255, 255, 255, 0) 100%);
+        background-repeat: repeat-x;
+        border-color: #ff3030;
+        border-width: 1px 0;        
+    }
+    .iImporter .iGallery{
         text-align: center;
         float:left;
         padding: 5px;
@@ -60,17 +94,18 @@
         width: 110px;
         height: 140px;
     }
-    .imageGallery img {
+    .iImporter .iGallery img {
         width: 100px;
         height: 100px;
         padding-top: 5px;
     }
+    
 </style>
 <form>
-    <div data-dojo-type='dijit/layout/TabContainer' style="width:95%; heigth:95%;">
+    <div class="iImporter" data-dojo-type='dijit/layout/TabContainer' style="width:95%; heigth:100%;">
         <div style="width:50%;heigth:100%; float:left;" data-dojo-type='dijit/layout/ContentPane' title="Galeria">@galleryImage@</div>
-        <div data-dojo-type='dijit/layout/ContentPane' title="Tree">
-            <div style="width:95%; height:95%;">
+        <div data-dojo-type='dijit/layout/ContentPane' title="Tree" style="width:50%;heigth:100%; float:left;">
+            <div style="width:95%; height:100%;">
                 <div id="treeContentPane" style="width:25%;float:left;"></div>
                 <div id="treeFrom" style="float:left;"><input type="text" name="dirname" id="dirname"/></div>
             </div>

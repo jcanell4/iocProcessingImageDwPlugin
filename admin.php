@@ -172,12 +172,12 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
         foreach ($arrayDir as $file) {
             $name = substr($file, 0, -4);//Li treu la extensio .pde
             if ($file == '.' | $file == '..') continue;
-            $html .="<div class='imageGallery'>"
-                    . "<div class='imageCheckbox'><input type='checkbox' name='checkbox_".$name."'/></div>"
+            $html .="<div class='iGallery'>"
+                    . "<div class='iCheckbox'><input type='checkbox' name='checkbox_".$name."'/></div>"
                     . "<img src='".$dir.$file."' />"
-                    . "<div class='imageLink'><a href='".DOKU_URL.$dir.$file."' target='_blank'>Veure Original</a></div></div>";
+                    . "<div class='iLink'><a href='".DOKU_URL.$dir.$file."' target='_blank'>Veure Original</a></div></div>";
         }
-//        closedir($dir);
+        closedir($arrayDir);
         return $html;
     }
 
