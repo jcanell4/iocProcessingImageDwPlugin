@@ -33,7 +33,24 @@
         ready(function() {
             //parser.parse();
 
+            var sendForm = false;
+            var callParam = "save_pde_algorithm";
+            var doParam = "";
+            var algorithmNameParam = "";
+
+
             var uploader = registry.byId('uploader');
+            var form = dojo.byId("f1");
+
+            var fileExistsDialog = registry.byId('fileExistsDialog');
+            var bSobreescriure = registry.byId('bSobreescriure');
+            var bRenombrar = registry.byId('bRenombrar');
+
+            var renameDialog = registry.byId('renameDialog');
+            var bOk = registry.byId('bOk');
+            var bCancela = registry.byId('bCancela');
+            var newFilename = dojo.byId("newFilename");
+
 
             var handleUpload = function(upl, node) {
                 cn.connect(upl, 'onComplete', function(data) {
@@ -48,56 +65,83 @@
                     dom.byId('response').appendChild(div);
                 });
             };
+
             var handleDnD = function(domnode, uploader) {
                 if (uploader.addDropTarget && uploader.uploadType == 'html5') {
-//                    domConst.create('div', {innerHTML: 'Drag and Drop files to this fieldset'}, domnode, 'last');
                     uploader.addDropTarget(domnode);
                 }
             };
 
+            var overrideAlgorithm = function() {
+                doParam = "modifyAlgorithm";
+//                algorithmNameParam = uploader.getFileList()[0].name;
+            }   
+
+            var renameFile = function() {
+                
+                doParam = "appendAlgorithm";
+//                algorithmNameParam = domAttr.get(newFilename, 'value');
+            }
+
+            //fileExistsDialog events
+//            cn.connect(fileExistsDialog, 'onHide', function() {alert("No has pujat cap algorisme al servidor")});
+            cn.connect(bSobreescriure, 'onClick', overrideAlgorithm());
+            cn.connect(bRenombrar, 'onClick', function() {
+                fileExistsDialog.hide();
+                domAttr.set(newFilename, 'value', uploader.getFileList()[0].name)
+                renameDialog.show();
+            });
+
+            //renameDialog events
+//            cn.connect(renameDialog, 'onHide', function() {alert("No has pujat cap algorisme al servidor")});
+            cn.connect(bOk, 'onClick', renameFile());
+            cn.connect(bCancela, 'onClick', function() {
+                renameDialog.hide();
+            });
+
             cn.connect(registry.byId('remBtn'), 'onClick', uploader, 'reset');
-            cn.connect(uploader, 'onProgress', function(event) {event.stopPropagation();event.stop();});
-            cn.connect(uploader, 'onSubmit', function(event) {event.stopPropagation();event.stop();});
-            cn.connect(uploader, 'onBegin', function() {return false;});
-            cn.connect(dom.byId('f1'), 'submit', function(event) {
-//                alert("submit form");
-                event.stopPropagation();
+
+            var existeixFitxer = function() {
+                doParam = "existsAlgorithm";
+                algorithmNameParam = uploader.getFileList()[0].name;
                 var xhrArgs = {
                     url: '/dokuwiki/lib/plugins/ajaxcommand/ajax.php',
                     handleAs: 'json',
-                    sync:'true',
+                    sync: 'true',
                     content: {
-                        call: 'save_pde_algorithm',
-                        do: 'existsAlgorithm',
-                        algorithmName: uploader.getFileList()[0].name
+                        call: callParam,
+                        do: doParam,
+                        algorithmName: algorithmNameParam
                     },
                     load: function(data) {
                         var code = data[0].value.code;
-                        var form = dojo.byId("f1");
-                        var action = domAttr.get(form, 'action');
-                        var do_param = "";
-                        alert(data[0].value.code);
-                        if (code == 2) {
-                            do_param = "appendAlgorithm";
-                        }else {
-                            //TODO
-                        }
-//                        alert(action+"&do="+do_param);
-                        domAttr.set(form, 'action', action+"&do="+do_param);
-                        alert(domAttr.get(form, 'action'));
-                        uploader.submit();
-                        handleUpload(uploader,dom.byId('response'))
+                        return code != 2;
                     },
                     error: function(error) {
-                        alert(error);
+                        alert(error);//TODO
                     }
                 }
-                xhr.get(xhrArgs);
+                return xhr.get(xhrArgs);
+            }
+
+
+            cn.connect(registry.byId('submit'), 'onClick', function() {
+                var action = domAttr.get(form, 'action');
+                if (existeixFitxer()) {
+                    alert("Existeix fitxer");
+                    fileExistsDialog.show();
+                } else {
+                    alert("No existeix fitxer");
+                    doParam = "appendAlgorithm";
+                    sendForm = true;
+                }
+
+                domAttr.set(form, 'action', action + "&do=" + doParam);
+                return sendForm;
             });
-            cn.connect(registry.byId('submit'), 'onClick', function(){
-                
-            });
-            //handleUpload(uploader, dom.byId('response'));
+
+            handleUpload(uploader, dom.byId('response'));
+
             if (require.has('file-multiple')) {
                 handleDnD(uploader.domNode.parentNode, uploader);
             }
@@ -134,4 +178,23 @@
             <input type="submit" id="submit" label="Carrega" data-dojo-type="dijit/form/Button" />
         </div>
     </fieldset>
+    <div data-dojo-type="dijit/Dialog" id="fileExistsDialog" title="Fitxer existent" style="display: none">
+        <div class="dijitDialogPaneContentArea">
+            <p>Ja existeix un fitxer amb aquest nom, què vols fer?</p>
+        </div>
+        <div class="dijitDialogPaneActionBar">
+            <button data-dojo-type="dijit/form/Button" type="button" id="bSobreescriure">Sobreescriure</button>
+            <button data-dojo-type="dijit/form/Button" type="button" id="bRenombrar">Renombrar</button>
+        </div>
+    </div>
+
+    <div data-dojo-type="dijit/Dialog" id="renameDialog" title="Renombra el fitxer" style="display: none">
+        <div class="dijitDialogPaneContentArea">
+            Nou nom: <input type="text" name="newFilename" id="newFilename"/>
+        </div>
+        <div class="dijitDialogPaneActionBar">
+            <button data-dojo-type="dijit/form/Button" type="button" id="bOk">Ok</button>
+            <button data-dojo-type="dijit/form/Button" type="button" id="bCancela">Cancela</button>
+        </div>
+    </div>
 </form>
