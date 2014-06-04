@@ -109,7 +109,6 @@
                     },
                     load: function(data) {
                         var code = data[0].value.code;
-                        alert(code);
                         fitxer = code !== 2;
                     },
                     error: function(error) {
@@ -129,25 +128,20 @@
                 var doparam = "";
                 var algorithmnameparam = uploader.getFileList()[0].name;
                 if (fitxer) {
-                    alert("Existeix fitxer");
                     if (confirm("Vols sobreescriure el fitxer?")) {
-                        alert("sobreescriu");
                         doparam = "modifyAlgorithm"
                         sendForm = true;
                     } else {
                         if (confirm("Llavors el vols renombrar?")) {
-                            var newFilename = uploader.getFileList()[0].name;
-                            newFilename = prompt("Nou nom:", newFilename);
-                            while(newFilename != null & newFilename == uploader.getFileList()[0].name) {
+                            algorithmnameparam = prompt("Nou nom:", algorithmnameparam);
+                            while(algorithmnameparam != null & algorithmnameparam == uploader.getFileList()[0].name) {
                                 alert("Es el mateix nom, canvia'l");
-                                newFilename = prompt("Nou nom:", newFilename);
+                                algorithmnameparam = prompt("Nou nom:", algorithmnameparam);
                             }
-                            if (newFilename != null) {
-                                doParam = "appendAlgorithm";
-                                if (endsWith(newFilename, ".pde")) {
-                                    algorithmnameparam = newFilename;
-                                } else {
-                                    algorithmnameparam = newFilename + ".pde";
+                            if (algorithmnameparam != null) {
+                                doparam = "appendAlgorithm";
+                                if (!endsWith(algorithmnameparam, ".pde")) {
+                                    algorithmnameparam = algorithmnameparam + ".pde";
                                 }
                                 sendForm = true;
                             }
@@ -156,13 +150,8 @@
                 } else {
                     alert("No existeix fitxer");
                     doparam = "appendAlgorithm";
-//                    algorithmnameparam = uploader.getFileList()[0].name;
                     sendForm = true;
                 }
-//                var action = "/dokuwiki/lib/plugins/ajaxcommand/ajax.php?call=save_pde_algorithm";
-//                action = action + "&do=" + doParam + "&algorithmName=" + algorithmNameParam;
-//                domAttr.set(form, 'action', action);
-//                alert(action);
                 domAttr.set(doParam, 'value', doparam);
                 domAttr.set(algorithmNameParam, 'value', algorithmnameparam);
                 return sendForm;
