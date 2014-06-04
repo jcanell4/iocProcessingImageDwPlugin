@@ -108,23 +108,37 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
 
         $galleryImageGenerator->setChanges($changes);
         $galleryImageHtml = $galleryImageGenerator->getHtml();
-
-        $dojo = "<script type='text/javascript'>"
-                . "require(["
-                . "'dojo/parser', "
-                . "'dijit/layout/TabContainer', "
-                . "'dijit/layout/ContentPane'"
-                . "]);</script>";
-        $html = ""
-                . "<div style='width: 800; height: 650px;'>"
-                . "<div data-dojo-type='dijit/layout/TabContainer' style='width:100%; height: 100%;'>"
-                . "<div data-dojo-type='dijit/layout/ContentPane' title='Generació' id='generateImage' >" . $generateImageHtml . "</div>"
-                . "<div data-dojo-type='dijit/layout/ContentPane' title='Càrrega' id='loadAlgorithm'>" . $loadAlgorithmHtml . "</div>"
-                . "<div data-dojo-type='dijit/layout/ContentPane' title='Galeria' id='galleryImage'>" . $galleryImageHtml . "</div>"
-                . "</div>"
-                . "</div>"
-                . "";
-        echo $dojo . $html;
+        
+        if(isset($_REQUEST['tab'])){
+            switch ($_REQUEST['tab']){
+                case "generateImage":
+                    echo $generateImageHtml;
+                    break;
+                case "loadAlgorithm":
+                    echo $loadAlgorithmHtml;
+                    break;
+                case "galleryImage":
+                    echo $galleryImageHtml;
+                    break;
+            }            
+        }else{
+            $dojo = "<script type='text/javascript'>"
+                    . "require(["
+                    . "'dojo/parser', "
+                    . "'dijit/layout/TabContainer', "
+                    . "'dijit/layout/ContentPane'"
+                    . "]);</script>";
+            $html = ""
+                    . "<div style='width: 800; height: 650px;'>"
+                    . "<div data-dojo-type='dijit/layout/TabContainer' style='width:100%; height: 100%;'>"
+                    . "<div data-dojo-type='dijit/layout/ContentPane' title='Generació' id='generateImage' >" . $generateImageHtml . "</div>"
+                    . "<div data-dojo-type='dijit/layout/ContentPane' title='Càrrega' id='loadAlgorithm'>" . $loadAlgorithmHtml . "</div>"
+                    . "<div data-dojo-type='dijit/layout/ContentPane' title='Galeria' id='galleryImage'>" . $galleryImageHtml . "</div>"
+                    . "</div>"
+                    . "</div>"
+                    . "";
+            echo $dojo . $html;
+        }
     }
 
     private function setParamsChanges(& $changes) {
