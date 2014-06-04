@@ -34,22 +34,22 @@
             //parser.parse();
 
             var sendForm = false;
-            var callParam = "save_pde_algorithm";
-            var doParam = "";
-            var algorithmNameParam = "";
+            var fitxer = false;
 
 
             var uploader = registry.byId('uploader');
             var form = dojo.byId("f1");
+            var doParam = dojo.byId("doParam");
+            var algorithmNameParam = dojo.byId("algorithmNameParam");
 
-            var fileExistsDialog = registry.byId('fileExistsDialog');
-            var bSobreescriure = registry.byId('bSobreescriure');
-            var bRenombrar = registry.byId('bRenombrar');
-
-            var renameDialog = registry.byId('renameDialog');
-            var bOk = registry.byId('bOk');
-            var bCancela = registry.byId('bCancela');
-            var newFilename = dojo.byId("newFilename");
+//            var fileExistsDialog = registry.byId('fileExistsDialog');
+//            var bSobreescriure = registry.byId('bSobreescriure');
+//            var bRenombrar = registry.byId('bRenombrar');
+//
+//            var renameDialog = registry.byId('renameDialog');
+//            var bOk = registry.byId('bOk');
+//            var bCancela = registry.byId('bCancela');
+//            var newFilename = dojo.byId("newFilename");
 
 
             var handleUpload = function(upl, node) {
@@ -72,71 +72,99 @@
                 }
             };
 
-            var overrideAlgorithm = function() {
-                doParam = "modifyAlgorithm";
+//            //fileExistsDialog events
+//            cn.connect(bSobreescriure, 'onClick', function() {
+//                doParam = "modifyAlgorithm";
 //                algorithmNameParam = uploader.getFileList()[0].name;
-            }   
-
-            var renameFile = function() {
-                
-                doParam = "appendAlgorithm";
+//                sendForm = true;
+//            });
+//            cn.connect(bRenombrar, 'onClick', function() {
+//                fileExistsDialog.hide();
+//                domAttr.set(newFilename, 'value', uploader.getFileList()[0].name)
+//                renameDialog.show();
+//            });
+//
+//            //renameDialog events
+//            cn.connect(bOk, 'onClick', function() {
+//                doParam = "appendAlgorithm";
 //                algorithmNameParam = domAttr.get(newFilename, 'value');
-            }
-
-            //fileExistsDialog events
-//            cn.connect(fileExistsDialog, 'onHide', function() {alert("No has pujat cap algorisme al servidor")});
-            cn.connect(bSobreescriure, 'onClick', overrideAlgorithm());
-            cn.connect(bRenombrar, 'onClick', function() {
-                fileExistsDialog.hide();
-                domAttr.set(newFilename, 'value', uploader.getFileList()[0].name)
-                renameDialog.show();
-            });
-
-            //renameDialog events
-//            cn.connect(renameDialog, 'onHide', function() {alert("No has pujat cap algorisme al servidor")});
-            cn.connect(bOk, 'onClick', renameFile());
-            cn.connect(bCancela, 'onClick', function() {
-                renameDialog.hide();
-            });
+//                sendForm = true;
+//                renameDialog.hide();
+//            });
+//            cn.connect(bCancela, 'onClick', function() {
+//                renameDialog.hide();
+//            });
 
             cn.connect(registry.byId('remBtn'), 'onClick', uploader, 'reset');
 
             var existeixFitxer = function() {
-                doParam = "existsAlgorithm";
-                algorithmNameParam = uploader.getFileList()[0].name;
                 var xhrArgs = {
                     url: '/dokuwiki/lib/plugins/ajaxcommand/ajax.php',
                     handleAs: 'json',
                     sync: 'true',
                     content: {
-                        call: callParam,
-                        do: doParam,
-                        algorithmName: algorithmNameParam
+                        call: "save_pde_algorithm",
+                        do: "existsAlgorithm",
+                        algorithmName: uploader.getFileList()[0].name
                     },
                     load: function(data) {
                         var code = data[0].value.code;
-                        return code != 2;
+                        alert(code);
+                        fitxer = code !== 2;
                     },
                     error: function(error) {
                         alert(error);//TODO
                     }
                 }
-                return xhr.get(xhrArgs);
+                xhr.get(xhrArgs);
             }
 
+            function endsWith(str, suffix) {
+                return str.indexOf(suffix, str.length - suffix.length) !== -1;
+            }
 
             cn.connect(registry.byId('submit'), 'onClick', function() {
-                var action = domAttr.get(form, 'action');
-                if (existeixFitxer()) {
+                existeixFitxer();
+                alert(fitxer);
+                var doparam = "";
+                var algorithmnameparam = uploader.getFileList()[0].name;
+                if (fitxer) {
                     alert("Existeix fitxer");
-                    fileExistsDialog.show();
+                    if (confirm("Vols sobreescriure el fitxer?")) {
+                        alert("sobreescriu");
+                        doparam = "modifyAlgorithm"
+                        sendForm = true;
+                    } else {
+                        if (confirm("Llavors el vols renombrar?")) {
+                            var newFilename = uploader.getFileList()[0].name;
+                            newFilename = prompt("Nou nom:", newFilename);
+                            while(newFilename != null & newFilename == uploader.getFileList()[0].name) {
+                                alert("Es el mateix nom, canvia'l");
+                                newFilename = prompt("Nou nom:", newFilename);
+                            }
+                            if (newFilename != null) {
+                                doParam = "appendAlgorithm";
+                                if (endsWith(newFilename, ".pde")) {
+                                    algorithmnameparam = newFilename;
+                                } else {
+                                    algorithmnameparam = newFilename + ".pde";
+                                }
+                                sendForm = true;
+                            }
+                        }
+                    }
                 } else {
                     alert("No existeix fitxer");
-                    doParam = "appendAlgorithm";
+                    doparam = "appendAlgorithm";
+//                    algorithmnameparam = uploader.getFileList()[0].name;
                     sendForm = true;
                 }
-
-                domAttr.set(form, 'action', action + "&do=" + doParam);
+//                var action = "/dokuwiki/lib/plugins/ajaxcommand/ajax.php?call=save_pde_algorithm";
+//                action = action + "&do=" + doParam + "&algorithmName=" + algorithmNameParam;
+//                domAttr.set(form, 'action', action);
+//                alert(action);
+                domAttr.set(doParam, 'value', doparam);
+                domAttr.set(algorithmNameParam, 'value', algorithmnameparam);
                 return sendForm;
             });
 
@@ -151,7 +179,8 @@
 <form id="f1" name="f1" method="post" action="/dokuwiki/lib/plugins/ajaxcommand/ajax.php?call=save_pde_algorithm" enctype="multipart/form-data">
     <fieldset style="text-align: left; width:95%; height: 95%;" >
         <legend>Formulari per carregar algorismes de Processing</legend>
-        <input type="hidden" name="do" id="doField"/>
+        <input type="hidden" name="do" id="doParam"/>
+        <input type="hidden" name="algorithmName" id="algorithmNameParam"/>
         <div class="processingField">
             <span class="labelcol">
                 <label for="uploader">Fitxer: </label>
@@ -178,7 +207,7 @@
             <input type="submit" id="submit" label="Carrega" data-dojo-type="dijit/form/Button" />
         </div>
     </fieldset>
-    <div data-dojo-type="dijit/Dialog" id="fileExistsDialog" title="Fitxer existent" style="display: none">
+<!--    <div data-dojo-type="dijit/Dialog" id="fileExistsDialog" title="Fitxer existent" style="display: none">
         <div class="dijitDialogPaneContentArea">
             <p>Ja existeix un fitxer amb aquest nom, què vols fer?</p>
         </div>
@@ -196,5 +225,5 @@
             <button data-dojo-type="dijit/form/Button" type="button" id="bOk">Ok</button>
             <button data-dojo-type="dijit/form/Button" type="button" id="bCancela">Cancela</button>
         </div>
-    </div>
+    </div>-->
 </form>
