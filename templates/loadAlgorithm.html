@@ -38,9 +38,9 @@
 
 
             var uploader = registry.byId('uploader');
-            var form = dojo.byId("f1");
-            var doParam = dojo.byId("doParam");
-            var algorithmNameParam = dojo.byId("algorithmNameParam");
+            var form = dom.byId("f1");
+            var doParam = dom.byId("doParam");
+            var algorithmNameParam = dom.byId("algorithmNameParam");
 
 //            var fileExistsDialog = registry.byId('fileExistsDialog');
 //            var bSobreescriure = registry.byId('bSobreescriure');
@@ -98,6 +98,7 @@
             cn.connect(registry.byId('remBtn'), 'onClick', uploader, 'reset');
 
             var existeixFitxer = function() {
+                alert("Function existeixFitxer");
                 var xhrArgs = {
                     url: '/dokuwiki/lib/plugins/ajaxcommand/ajax.php',
                     handleAs: 'json',
