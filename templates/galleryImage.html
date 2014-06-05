@@ -1,6 +1,6 @@
 <script type="text/javascript">
     require([
-        "dijit/Tree"
+                "dijit/Tree"
                 , "dijit/form/RadioButton"
                 , "dijit/tree/ObjectStoreModel"
                 , "dojo/store/JsonRest"
@@ -10,8 +10,9 @@
                 , "dijit/registry"
                 , "dojo/_base/declare"
                 , "dojo/json"
+                , "dojo/_base/event"
     ], function(Tree, RadioButton, ObjectStoreModel, JsonRest,
-            domAttr, dom, cn, registry, declare, JSON) {
+            domAttr, dom, cn, registry, declare, JSON, event) {
         var nodeId = "treeContentPane"
         var commandUrl = "lib/plugins/ajaxcommand/ajaxrest.php/ns_tree_rest/@sectokValue@/d/";
 
@@ -77,10 +78,10 @@
             }
         });
 
-        var form = dojo.byId("fGallery");
+        var form = dom.byId("fGallery");
 
-        dojo.connect(form, "onsubmit", function(event) {
-            dojo.stopEvent(event);
+        cn.connect(form, "onsubmit", function(e) {
+            event.stop(e);
             var xhrArgs = {
                 form: form,
                 handleAs: "json",
