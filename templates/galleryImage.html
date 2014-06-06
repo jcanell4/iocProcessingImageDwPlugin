@@ -11,8 +11,9 @@
                 , "dojo/_base/declare"
                 , "dojo/json"
                 , "dojo/_base/event"
+                , "dojo/_base/xhr"
     ], function(Tree, RadioButton, ObjectStoreModel, JsonRest,
-            domAttr, dom, cn, registry, declare, JSON, event) {
+            domAttr, dom, cn, registry, declare, JSON, event, xhr) {
         var nodeId = "treeContentPane"
         var commandUrl = "lib/plugins/ajaxcommand/ajaxrest.php/ns_tree_rest/@sectokValue@/d/";
 
@@ -93,7 +94,7 @@
                     alert(error);
                 }
             }
-            var deferred = dojo.xhrPost(xhrArgs);
+            var deferred = xhr.post(xhrArgs);
         });
     });
 </script>
