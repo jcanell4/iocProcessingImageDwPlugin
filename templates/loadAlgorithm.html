@@ -47,6 +47,7 @@
             var info = "";
             var algorithmName = "";
 
+            var processingForm = dom.byId('processingForm');
             var uploader = registry.byId('uploader');
             var doParam = dom.byId("doParam");
             var algorithmNameParam = dom.byId("algorithmNameParam");
@@ -60,24 +61,16 @@
 
             var handleUpload = function(upl, node) {
                 cn.connect(upl, 'onComplete', function(data) {
-                    //var json = JSON.parse(data, false);
-                    alert('complete');
-                    resetForm();
                     alert(data[0].value.info);
-                    var div = domConst.create('div', {className: 'thumb'});
-                    var span = domConst.create('span', {className: 'thumbbk'}, div);
-                    span.innerHTML = '<p> type: ' + data[0].type + '</p>'
-                            + '<p> value: ' + JSON.stringify(data[0].value) + '</p>'
-
-                    dom.byId('response').appendChild(div);
+                    resetForm();
                 });
             };
 
-            var handleDnD = function(domnode, uploader) {
-                if (uploader.addDropTarget && uploader.uploadType == 'html5') {
-                    uploader.addDropTarget(domnode);
-                }
-            };
+//            var handleDnD = function(domnode, uploader) {
+//                if (uploader.addDropTarget && uploader.uploadType == 'html5') {
+//                    uploader.addDropTarget(domnode);
+//                }
+//            };
 
             var showFileExists = function() {
                 var nodes = query(".existsFile");
@@ -91,9 +84,10 @@
             }
 
             var resetForm = function() {
+                hideFileExists();
+                processingForm.reset();
                 uploader.reset();
                 estat = 0;
-                hideFileExists();
                 html.set(errorFile, "");
                 html.set(errorRename, "");
                 domAttr.set(tfRename, 'value', "");
@@ -126,7 +120,9 @@
                         info = data[0].value.info;
                     },
                     error: function(error) {
-                        alert(error);//TODO
+                        console.log(error);
+                        estat = -10;
+                        info = "Error inesperat";
                     }
                 }
                 xhr.get(xhrArgs);
@@ -140,12 +136,13 @@
                 var sendForm = false;
                 var doparam = "";
                 if (estat == 0) {
-                    existeixFitxer();
+                    existeixFitxer(); //Canvia el estat a 2 si no existeix el fitxer,
+                    // o a -2 si ja existeix el fitxer
                 }
                 if (estat == 2) { //No existeix el fitxer
                     sendForm = true;
                     doparam = "appendAlgorithm";
-                    algorithmName = uploader.getFileList()[0].name;
+//                    algorithmName = uploader.getFileList()[0].name;
                 }
                 else if (estat == -2) { //Existeix el fitxer
                     sendForm = false;
@@ -164,6 +161,8 @@
                         var errorInfo = "";
                         doparam = "appendAlgorithm";
                         algorithmName = domAttr.get(tfRename, 'value');
+
+
                         if (algorithmName === null | algorithmName === "") {
                             sendForm = false;
                             errorInfo = "No pot ser buit";
@@ -174,15 +173,24 @@
                             sendForm = false;
                             errorInfo = "Nomes has possat la extensió";
                         } else {
-                            sendForm = true;
-                            if (!endsWith(algorithmName, ".pde")) {
-                                algorithmName += ".pde";
+                            existeixFitxer();
+                            if (estat == -2) {
+                                sendForm = false;
+                                errorInfo = "Aquest nom de fitxer de l'algorisme ja existeix";
+                            } else {
+                                sendForm = true;
+                                if (!endsWith(algorithmName, ".pde")) {
+                                    algorithmName += ".pde";
+                                }
                             }
                         }
                         if (!sendForm) {
                             html.set(errorRename, errorInfo);
                         }
                     }
+                } else {
+                    sendForm = false;
+                    info = "Error inesperat";
                 }
 
                 if (sendForm) {
@@ -193,14 +201,11 @@
             });
 
             handleUpload(uploader, dom.byId('response'));
-            handleDnD(uploader.domNode.parentNode, uploader);
-            if (require.has('file-multiple')) {
-                handleDnD(uploader.domNode.parentNode, uploader);
-            }
+//s
         });
     });
 </script>
-<form id="f1" name="f1" method="post" action="/dokuwiki/lib/plugins/ajaxcommand/ajax.php?call=save_pde_algorithm" enctype="multipart/form-data">
+<form id="processingForm" name="processingForm" method="post" action="/dokuwiki/lib/plugins/ajaxcommand/ajax.php?call=save_pde_algorithm" enctype="multipart/form-data">
     <fieldset style="text-align: left; width:95%; height: 95%;" >
         <legend>Formulari per carregar algorismes de Processing</legend>
         <input type="hidden" name="do" id="doParam"/>
