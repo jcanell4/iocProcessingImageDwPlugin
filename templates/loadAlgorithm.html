@@ -66,12 +66,6 @@
                 });
             };
 
-//            var handleDnD = function(domnode, uploader) {
-//                if (uploader.addDropTarget && uploader.uploadType == 'html5') {
-//                    uploader.addDropTarget(domnode);
-//                }
-//            };
-
             var showFileExists = function() {
                 var nodes = query(".existsFile");
                 nodes.style("display", "block");
@@ -201,7 +195,6 @@
             });
 
             handleUpload(uploader, dom.byId('response'));
-//s
         });
     });
 </script>
@@ -214,7 +207,7 @@
             <span class="labelcol">
                 <label for="uploader">Fitxer: </label>
             </span>
-            <div id="uploader" title="Pots arrosegar el fitxer fins aquí" data-dojo-type="dojox/form/Uploader" data-dojo-props="name:'uploadedfile',showInput:'before',isDebug:true">Selecciona</div>
+            <div id="uploader" data-dojo-type="dojox/form/Uploader" data-dojo-props="name:'uploadedfile',showInput:'before',isDebug:true">Selecciona</div>
             <span class="errorInfo" id="errorFile"></span>
         </div>
         <div class="processingField existsFile">
@@ -227,8 +220,8 @@
             <span class="labelcol">
                 <label for="renameRadioField" >Renombrar: </label>
             </span>
-            <input style="margin-left: 3px" title="Introdueix un nom a l'algorisme" type="radio" name="existsFileParam" id="rfRename" value="rename"  />
-            <input style="margin-left: 3px" title="Introdueix un nom a l'algorisme" type="text" name="rename" id="tfRename"/>
+            <input style="margin-left: 3px" title="Sobreescriu el fitxer" type="radio" name="existsFileParam" id="rfRename" value="rename"  />
+            <input style="margin-left: 3px" title="Renombra el fitxer" type="text" name="rename" id="tfRename"/>
             <span class="errorInfo" id="errorRename"></span>
         </div>
         <div class="processingField">
