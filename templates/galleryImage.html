@@ -1,6 +1,6 @@
 <script type="text/javascript">
     require([
-                "dijit/Tree"
+        "dijit/Tree"
                 , "dijit/form/RadioButton"
                 , "dijit/tree/ObjectStoreModel"
                 , "dojo/store/JsonRest"
@@ -12,8 +12,9 @@
                 , "dojo/json"
                 , "dojo/_base/event"
                 , "dojo/_base/xhr"
+                , "dojo/query"
     ], function(Tree, RadioButton, ObjectStoreModel, JsonRest,
-            domAttr, dom, cn, registry, declare, JSON, event, xhr) {
+            domAttr, dom, cn, registry, declare, JSON, event, xhr, query) {
         var nodeId = "treeContentPane"
         var commandUrl = "lib/plugins/ajaxcommand/ajaxrest.php/ns_tree_rest/@sectokValue@/d/";
 
@@ -81,20 +82,46 @@
 
         var form = dom.byId("fGallery");
 
-        cn.connect(form, "onsubmit", function(e) {
-            event.stop(e);
-            var xhrArgs = {
-                form: form,
-                handleAs: "json",
-                load: function(data) {
-                    alert(data[0].type);
-                    alert(JSON.stringify(data[0].value));
-                },
-                error: function(error) {
-                    alert(error);
+        var xhrArgs = {
+            form: form,
+            handleAs: "json",
+            load: function(data) {
+                var info = data[0].value.info;
+                if (data[0].value.code == 0) {
+                    dom.byId("info").innerHTML = info;
+                    setTimeout(function() {
+                        dom.byId("info").innerHTML = "";
+                    }, 2000);
+                } else {
+                    dom.byId("errorInfo").innerHTML = info;
                 }
+            },
+            error: function(error) {
+                console.log(error);
+                dom.byId("errorInfo").innerHTML = "Error inesperat";
             }
-            var deferred = xhr.post(xhrArgs);
+        }
+
+        function endsWith(str, suffix) {
+            return str.indexOf(suffix, str.length - suffix.length) !== -1;
+        }
+
+        cn.connect(form, "onsubmit", function(e) {
+            dom.byId("errorInfo").innerHTML = "";
+            event.stop(e);
+            var checks = query("#imageGallery input[type=radio]:checked");
+            if (checks.length !== 0) {
+                var tfImageName = dom.byId("tfImageName");
+                var imageName = domAttr.get(tfImageName, 'value');
+                if (imageName !== "") {
+                    var deferred = xhr.post(xhrArgs);
+                } else {
+                    dom.byId("errorInfo").innerHTML = "El nom de la imatge no pot estar buit";
+                }
+            } else {
+                dom.byId("errorInfo").innerHTML = "No has seleccionat cap imatge";
+            }
+
         });
     });
 </script>
@@ -125,7 +152,7 @@
 </style>
 <form id="fGallery" name="igForm" method="post" action="/dokuwiki/lib/plugins/ajaxcommand/ajax.php?call=copy_image_to_project">
     <div class="iImporter">
-        <div data-dojo-type='dijit/layout/ContentPane' title="Galeria" style="float:left; width:50%; height: 600px;">@galleryImage@</div>
+        <div data-dojo-type='dijit/layout/ContentPane' title="Galeria" style="float:left; width:40%; height: 600px;" id="imageGallery">@galleryImage@</div>
         <div data-dojo-type='dijit/layout/ContentPane' title="Tree" style="float:left; width: 30%">
             <div>
                 <div id="treeContentPane"></div>
@@ -135,8 +162,12 @@
             <div>
                 <div id="treeFrom" style="margin-top:10px;">
                     <input type="hidden" id="projectPath" name="projectPath"/>
-                    <input type="submit" id="iSubmit" label="Copia imatges" title="Copia les imatges seleccionades en el directori seleccionat" data-dojo-type="dijit/form/Button" />
+                    <label for="tfImageName">Nom: </label>
+                    <input type="text" name="imageName" id="tfImageName" />
+                    <input type="submit" id="iSubmit" label="Copia imatge" title="Copia la imatge seleccionada en el directori seleccionat" data-dojo-type="dijit/form/Button"/>
                 </div>
+                <div id="info"></div>
+                <div class="errorInfo" id="errorInfo"></div>
             </div>
         </div>
     </div>

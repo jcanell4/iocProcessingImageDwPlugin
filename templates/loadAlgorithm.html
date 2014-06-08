@@ -55,13 +55,23 @@
             var tfRename = dom.byId('tfRename');
             var rbOverwrite = dom.byId('rbOverwrite');
 
-            //Error containers
+            //Info containers
             var errorRename = dom.byId("errorRename");
             var errorFile = dom.byId("errorFile");
+            var infoSubmit = dom.byId("infoSubmit");
+            var infoErrorSubmit = dom.byId("infoErrorSubmit");
 
             var handleUpload = function(upl, node) {
                 cn.connect(upl, 'onComplete', function(data) {
-                    alert(data[0].value.info);
+                    var info = data[0].value.info;
+                    if (data[0].value.code === 0) {
+                        html.set(infoSubmit,info);
+                        setTimeout(function(){
+                            html.set(infoSubmit,"");
+                        }, 2000);
+                    }else {
+                        html.set(infoErrorSubmit, info);
+                    }
                     resetForm();
                 });
             };
@@ -84,6 +94,7 @@
                 estat = 0;
                 html.set(errorFile, "");
                 html.set(errorRename, "");
+                html.set(infoErrorSubmit, "");
                 domAttr.set(tfRename, 'value', "");
                 domAttr.set(rbOverwrite, 'checked', 'checked');
             }
@@ -116,7 +127,6 @@
                     error: function(error) {
                         console.log(error);
                         estat = -10;
-                        info = "Error inesperat";
                     }
                 }
                 xhr.get(xhrArgs);
@@ -240,6 +250,8 @@
             <span class="labelcol">&nbsp;</span>
             <input type="button" id="remBtn" label="Neteja" data-dojo-type="dijit/form/Button" />
             <input type="submit" id="submit" label="Carrega" data-dojo-type="dijit/form/Button" />
+            <span id="infoSubmit"></span>
+            <span class="errorInfo" id="infoErrorSubmit"></span>
         </div>
     </fieldset>
 </form>

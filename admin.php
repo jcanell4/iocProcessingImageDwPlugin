@@ -190,7 +190,7 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
             foreach ($arrayDir as $file) {
                 $name = substr($file, 0, -4); //Li treu la extensio .pde
                 $html .="<div class='iGallery'>"
-                        . "<div class='iCheckbox'><input type='checkbox' name='checkbox_" . $name . "' value='" . $file . "'/></div>"
+                        . "<div class='iCheckbox'><input type='radio' name='checkImage' value='" . $file . "'/></div>"
                         . "<img src='" . $dir . $file . "' />"
                         . "<div class='iLink'><a href='" . DOKU_URL . $dir . $file . "' target='_blank'>Veure Original</a></div></div>";
             }
