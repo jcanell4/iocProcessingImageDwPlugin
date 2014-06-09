@@ -49,3 +49,30 @@ $lang['add_ok']                = 'L\'usuari s\'ha afegit amb èxit';
 $lang['add_fail']              = 'No s\'ha pogut afegir l\'usuari';
 $lang['notify_ok']             = 'S\'ha enviat el correu de notificació';
 $lang['notify_fail']           = 'No s\'ha pogut enviar el correu de notificació';
+
+//Errors
+$lang['emptyError']            = 'No pot estar buit';
+$lang['equalNameError']        = 'Es el mateix nom';
+$lang['onlyExtensionError']    = 'Nomes has possat la extensió';
+$lang['fileExistsError']       = 'Aquest fitxer ja existeix';
+$lang['unexpectedError']       = 'Error inesperat';
+$lang['emptyNameImageError']   = 'El nom de la imatge no pot estar buit';
+$lang['noImageSelectError']    = 'No has seleccionat cap imatge';
+
+//form
+$lang['formLegend']            = 'Formulari per carregar algorismes de Processing';
+$lang['file']                  = 'Fitxer';
+$lang['overwrite']             = 'Sobreescriure';
+$lang['rename']                = 'Renombrar';
+$lang['name']                  = 'Nom';
+$lang['description']           = 'Descripció';
+$lang['reset']                 = 'Neteja';
+$lang['upload']                = 'Carrega';
+$lang['nameTitle']             = 'Introdueix un nom a l\'algorisme';
+$lang['renameTitle']           = 'Renombra el fitxer';
+$lang['select']                = 'Selecciona';
+
+//Gallery
+$lang['submitTitle']           = 'Copia la imatge seleccionada en el directori seleccionat';
+$lang['copyImage']             = 'Copia imatge';
+$lang['noPdeImage']            = 'No existeix cap imatge en el repository.';

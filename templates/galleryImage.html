@@ -98,7 +98,7 @@
             },
             error: function(error) {
                 console.log(error);
-                dom.byId("errorInfo").innerHTML = "Error inesperat";
+                dom.byId("errorInfo").innerHTML = "@unexpectedError@";
             }
         }
 
@@ -116,10 +116,10 @@
                 if (imageName !== "") {
                     var deferred = xhr.post(xhrArgs);
                 } else {
-                    dom.byId("errorInfo").innerHTML = "El nom de la imatge no pot estar buit";
+                    dom.byId("errorInfo").innerHTML = "@emptyNameImageError@";
                 }
             } else {
-                dom.byId("errorInfo").innerHTML = "No has seleccionat cap imatge";
+                dom.byId("errorInfo").innerHTML = "@noImageSelectError@";
             }
 
         });
@@ -164,7 +164,7 @@
                     <input type="hidden" id="projectPath" name="projectPath"/>
                     <label for="tfImageName">Nom: </label>
                     <input type="text" name="imageName" id="tfImageName" />
-                    <input type="submit" id="iSubmit" label="Copia imatge" title="Copia la imatge seleccionada en el directori seleccionat" data-dojo-type="dijit/form/Button"/>
+                    <input type="submit" id="iSubmit" label="@copyImatge@" title="@submitTitle@" data-dojo-type="dijit/form/Button"/>
                 </div>
                 <div id="info"></div>
                 <div class="errorInfo" id="errorInfo"></div>

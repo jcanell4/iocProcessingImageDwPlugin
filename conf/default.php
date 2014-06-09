@@ -4,6 +4,8 @@
  *
  * @author Daniel Criado Casas <dani.criado.casas@gmail.com> 
  */
+
+//////APPLET
 //com que tb s'utilitza en el ajaxcommand, s'hauria de possar en un conf mes general?
 $conf['processingImageRepository']      = '/repository/pde/';  // repository for generated images using pde algorithms
 //PARAMS
@@ -26,3 +28,10 @@ $conf['imageNameOptionValue']           = 'imageName';
 $conf['nameOfFileOption']               = 'file';
 $conf['urls']                           = 'lib/_java/pde/classes/';
 
+
+//////IMPORTAR
+$conf['appendAlgorithmParam']           = 'appendAlgorithm';
+$conf['modifyAlgorithmParam']           = 'modifyAlgorithm';
+$conf['existsAlgorithmParam']           = 'existsAlgorithm';
+$conf['savePdeAlgorithmCommand']        = 'save_pde_algorithm';
+$conf['pdeExtension']                   = '.pde';

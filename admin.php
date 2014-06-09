@@ -21,19 +21,6 @@ if (!defined('DOKU_PLUGIN'))
 if (!defined('DOKU_PROCESSING'))
     define('DOKU_PROCESSING', DOKU_PLUGIN . "processingmanager/");
 
-if (!defined('DOKU_JAVA'))
-    define('DOKU_JAVA', DOKU_INC . 'lib/_java/');
-
-if (!defined('DOKU_JAVA_LIB'))
-    define('DOKU_JAVA_LIB', DOKU_JAVA . 'lib/');
-
-if (!defined('DOKU_JAVA_PDE_CLASSES'))
-    define('DOKU_JAVA_PDE_CLASSES', DOKU_JAVA . 'pde/classes/');
-
-if (!defined('DOKU_COMMAND'))
-    define('DOKU_COMMAND', DOKU_PLUGIN . 'ajaxcommand/');
-
-
 require_once DOKU_INC . 'inc/common.php';
 require_once DOKU_PROCESSING . 'generators/generateImage.php';
 require_once DOKU_PROCESSING . 'generators/loadAlgorithm.php';
@@ -159,7 +146,6 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
         $changes['@appletHeight@'] = $this->getConf('appletHeight');
         $changes['@appletWidth@'] = $this->getConf('appletWidth');
         $changes['@codeValue@'] = $this->getConf('codeValue');
-        //$changes['@archiveValue@'] = DOKU_JAVA . $this->getConf('appletJarName'); PERQUE AMB RUTA RELATIVA?
         $changes['@archiveValue@'] = $this->getConf('appletJarName');
         $changes['@urlsValue@'] = $this->getUrlsValue();
         $changes['@CookieValue@'] = $this->getCookies();
@@ -172,11 +158,42 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
     }
 
     private function setLoadAlgorithmChanges(& $changes) {
+        $changes['@emtpyError@'] = $this->getLang('emptyError');
+        $changes['@equalNameError@'] = $this->getLang('equalNameError');
+        $changes['@onlyExtensionError@'] = $this->getLang('onlyExtensionError');
+        $changes['@fileExistsError@'] = $this->getLang('fileExistsError');
+        $changes['@unexpectedError@'] = $this->getLang('unexpectedError');
+        $changes['@formLegend@'] = $this->getLang('formLegend');
+        $changes['@file@'] = $this->getLang('file');
+        $changes['@overwrite@'] = $this->getLang('overwrite');
+        $changes['@rename@'] = $this->getLang('rename');
+        $changes['@name@'] = $this->getLang('name');
+        $changes['@description@'] = $this->getLang('description');
+        $changes['@reset@'] = $this->getLang('reset');
+        $changes['@upload@'] = $this->getLang('upload');
+        $changes['@select@'] = $this->getLang('select');
+        $changes['@nameTitlte@'] = $this->getLang('nameTitle');
+        $changes['@renameTitle@'] = $this->getLang('renameTitle');
         
+        
+        $changes['@appendAlgorithmParam@'] = $this->getConf('appendAlgorithmParam');
+        $changes['@modifyAlgorithmParam@'] = $this->getConf('modifyAlgorithmParam');
+        $changes['@existsAlgorithmParam@'] = $this->getConf('existsAlgorithmParam');
+        $changes['@savePdeAlgorithmCommand@'] = $this->getConf('savePdeAlgorithmCommand');
+        
+        $changes['@pdeExtension@'] = $this->getConf('pdeExtension');
     }
 
     private function setGalleryImageChanges(& $changes) {
+        
         $changes['@galleryImage@'] = $this->getGalleryImage();
+        
+        
+        $changes['@unexpectedError@'] = $this->getLang('unexpectedError');
+        $changes['@emptyNameImageError@'] = $this->getLang('emptyNameImageError');
+        $changes['@noImageSelectError@'] = $this->getLang('noImageSelectError');
+        $changes['@submitTitle@'] = $this->getLang('submitTitle');
+        $changes['@copyImage@'] = $this->getLang('copyImage');
     }
 
     private function getGalleryImage() {
@@ -195,7 +212,7 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
                         . "<div class='iLink'><a href='" . DOKU_URL . $dir . $file . "' target='_blank'>Veure Original</a></div></div>";
             }
         } else {
-            $html = "<div>No existeix cap imatge en el repository.</div>";
+            $html = "<div>@noPdeImage@</div>";
         }
         closedir($arrayDir);
         return $html;
@@ -214,6 +231,11 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
         return $urlsValue;
     }
 
+    /**
+     * Genera un string amb les cookies.
+     * @global type $_COOKIE
+     * @return string 
+     */
     private function getCookies() {
         global $_COOKIE;
         $strCookie = "";

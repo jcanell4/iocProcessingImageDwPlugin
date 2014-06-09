@@ -116,8 +116,8 @@
                     handleAs: 'json',
                     sync: 'true',
                     content: {
-                        call: "save_pde_algorithm",
-                        do: "existsAlgorithm",
+                        call: "@savePdeAlgorithmCommand@",
+                        do: "@existsAlgorithmParam@",
                         algorithmName: algorithmName
                     },
                     load: function(data) {
@@ -145,8 +145,7 @@
                 }
                 if (estat == 2) { //No existeix el fitxer
                     sendForm = true;
-                    doparam = "appendAlgorithm";
-//                    algorithmName = uploader.getFileList()[0].name;
+                    doparam = "@appendAlgorithmParam@";
                 }
                 else if (estat == -2) { //Existeix el fitxer
                     sendForm = false;
@@ -158,33 +157,33 @@
                     var rfOverwrite = dom.byId('rfOverwrite');
                     if (domAttr.get(rfOverwrite, 'checked')) {
                         sendForm = true;
-                        doparam = "modifyAlgorithm";
+                        doparam = "@modifyAlgorithmParam@";
                         algorithmName = uploader.getFileList()[0].name;
                     } else {
                         var tfRename = dom.byId('tfRename');
                         var errorInfo = "";
-                        doparam = "appendAlgorithm";
+                        doparam = "@appendAlgorithmParam@";
                         algorithmName = domAttr.get(tfRename, 'value');
 
 
                         if (algorithmName === null | algorithmName === "") {
                             sendForm = false;
-                            errorInfo = "No pot ser buit";
+                            errorInfo = "@emptyError@";
                         } else if (algorithmName === uploader.getFileList()[0].name) {
                             sendForm = false;
-                            errorInfo = "Es el mateix nom";
-                        } else if (algorithmName === ".pde") {
+                            errorInfo = "@equalNameError@";
+                        } else if (algorithmName === "@pdeExtension@") {
                             sendForm = false;
-                            errorInfo = "Nomes has possat la extensió";
+                            errorInfo = "@onlyExtensionError@";
                         } else {
                             existeixFitxer();
                             if (estat == -2) {
                                 sendForm = false;
-                                errorInfo = "Aquest nom de fitxer de l'algorisme ja existeix";
+                                errorInfo = "@fileExistsError@";
                             } else {
                                 sendForm = true;
-                                if (!endsWith(algorithmName, ".pde")) {
-                                    algorithmName += ".pde";
+                                if (!endsWith(algorithmName, "@pdeExtension@")) {
+                                    algorithmName += "@pdeExtension@";
                                 }
                             }
                         }
@@ -194,7 +193,7 @@
                     }
                 } else {
                     sendForm = false;
-                    info = "Error inesperat";
+                    info = "@unexpectedError@";
                 }
 
                 if (sendForm) {
@@ -208,48 +207,48 @@
         });
     });
 </script>
-<form id="processingForm" name="processingForm" method="post" action="/dokuwiki/lib/plugins/ajaxcommand/ajax.php?call=save_pde_algorithm" enctype="multipart/form-data">
+<form id="processingForm" name="processingForm" method="post" action="/dokuwiki/lib/plugins/ajaxcommand/ajax.php?call=@savePdeAlgorithmCommand@" enctype="multipart/form-data">
     <fieldset style="text-align: left; width:95%; height: 95%;" >
-        <legend>Formulari per carregar algorismes de Processing</legend>
+        <legend>@formLegend@</legend>
         <input type="hidden" name="do" id="doParam"/>
         <input type="hidden" name="algorithmName" id="algorithmNameParam"/>
         <div class="processingField">
             <span class="labelcol">
-                <label for="uploader">Fitxer: </label>
+                <label for="uploader">@file@: </label>
             </span>
-            <div id="uploader" data-dojo-type="dojox/form/Uploader" data-dojo-props="name:'uploadedfile',showInput:'before',isDebug:true">Selecciona</div>
+            <div id="uploader" data-dojo-type="dojox/form/Uploader" data-dojo-props="name:'uploadedfile',showInput:'before',isDebug:true">@select@</div>
             <span class="errorInfo" id="errorFile"></span>
         </div>
         <div class="processingField existsFile">
             <span class="labelcol">
-                <label for="overwriteRadioField" >Sobreescriure: </label>
+                <label for="overwriteRadioField" >@overwrite@: </label>
             </span>
-            <input style="margin-left: 3px" title="Introdueix un nom a l'algorisme" type="radio" name="existsFileParam" id="rfOverwrite" value="overwrite" checked="checked" />
+            <input style="margin-left: 3px" type="radio" name="existsFile" id="rfOverwrite" value="overwrite" checked="checked" />
         </div>
         <div class="processingField existsFile">
             <span class="labelcol">
-                <label for="renameRadioField" >Renombrar: </label>
+                <label for="renameRadioField" >@rename@: </label>
             </span>
-            <input style="margin-left: 3px" title="Sobreescriu el fitxer" type="radio" name="existsFileParam" id="rfRename" value="rename"  />
-            <input style="margin-left: 3px" title="Renombra el fitxer" type="text" name="rename" id="tfRename"/>
+            <input style="margin-left: 3px" type="radio" name="existsFile" id="rfRename" value="rename"  />
+            <input style="margin-left: 3px" title="@renameTitle@" type="text" name="rename" id="tfRename"/>
             <span class="errorInfo" id="errorRename"></span>
         </div>
         <div class="processingField">
             <span class="labelcol">
-                <label for="nomField" >Nom: </label>
+                <label for="nomField" >@name@: </label>
             </span>
-            <input style="margin-left: 3px" title="Introdueix un nom a l'algorisme" type="text" name="nom" id="nomField" aria-label="nom" />
+            <input style="margin-left: 3px" title="@nameTitle@" type="text" name="nom" id="nomField" />
         </div>
         <div class="processingField">
             <span class="labelcol">
-                <label for="descripcioField">Descripció: </label>
+                <label for="descripcioField">@description@: </label>
             </span>
-            <textarea id="descripcioField" rows="5" style="width: 50%; margin-left: 3px;" name="descripcio" aria-label="descripcio"></textarea>
+            <textarea id="descripcioField" rows="5" style="width: 50%; margin-left: 3px;" name="descripcio"></textarea>
         </div>
         <div class="processingField">
             <span class="labelcol">&nbsp;</span>
-            <input type="button" id="remBtn" label="Neteja" data-dojo-type="dijit/form/Button" />
-            <input type="submit" id="submit" label="Carrega" data-dojo-type="dijit/form/Button" />
+            <input type="button" id="remBtn" label="@reset@" data-dojo-type="dijit/form/Button" />
+            <input type="submit" id="submit" label="@upload@" data-dojo-type="dijit/form/Button" />
             <span id="infoSubmit"></span>
             <span class="errorInfo" id="infoErrorSubmit"></span>
         </div>
