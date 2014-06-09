@@ -67,12 +67,11 @@
                     if (data[0].value.code === 0) {
                         html.set(infoSubmit,info);
                         setTimeout(function(){
-                            html.set(infoSubmit,"");
+                            resetForm();
                         }, 2000);
                     }else {
                         html.set(infoErrorSubmit, info);
                     }
-                    resetForm();
                 });
             };
 
@@ -80,12 +79,12 @@
                 var nodes = query(".existsFile");
                 nodes.style("display", "block");
                 domAttr.set(tfRename, 'value', algorithmName);
-            }
+            };
 
             var hideFileExists = function() {
                 var nodes = query(".existsFile");
                 nodes.style("display", "none");
-            }
+            };
 
             var resetForm = function() {
                 hideFileExists();
@@ -95,9 +94,10 @@
                 html.set(errorFile, "");
                 html.set(errorRename, "");
                 html.set(infoErrorSubmit, "");
+                html.set(infoSubmit, "");
                 domAttr.set(tfRename, 'value', "");
                 domAttr.set(rbOverwrite, 'checked', 'checked');
-            }
+            };
 
             hideFileExists();
 
@@ -108,6 +108,8 @@
             cn.connect(uploader, 'onChange', function() {
                 estat = 0;//reinciem el estat, per saber que fer amb el fitxer
                 algorithmName = uploader.getFileList()[0].name;
+                html.set(errorFile, "");
+                html.set(infoErrorSubmit, "");
             });
 
             var existeixFitxer = function() {
@@ -128,15 +130,16 @@
                         console.log(error);
                         estat = -10;
                     }
-                }
+                };
                 xhr.get(xhrArgs);
-            }
+            };
 
             function endsWith(str, suffix) {
                 return str.indexOf(suffix, str.length - suffix.length) !== -1;
             }
 
             cn.connect(registry.byId('submit'), 'onClick', function() {
+                html.set(infoErrorSubmit, "");
                 var sendForm = false;
                 var doparam = "";
                 if (estat == 0) {
