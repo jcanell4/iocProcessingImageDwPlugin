@@ -13,6 +13,8 @@
                 , "dojo/_base/event"
                 , "dojo/_base/xhr"
                 , "dojo/query"
+                , "dijit/layout/ContentPane"
+                , "dijit/form/Button"
     ], function(Tree, RadioButton, ObjectStoreModel, JsonRest,
             domAttr, dom, cn, registry, declare, JSON, event, xhr, query) {
         var nodeId = "treeContentPane"
@@ -150,7 +152,7 @@
     }
 
 </style>
-<form id="fGallery" name="igForm" method="post" action="/dokuwiki/lib/plugins/ajaxcommand/ajax.php?call=copy_image_to_project">
+<form id="fGallery" name="igForm" method="post" action="/dokuwiki/lib/plugins/ajaxcommand/ajax.php?call=copy_image_to_project&sectok=@sectokValue@">
     <div class="iImporter">
         <div data-dojo-type='dijit/layout/ContentPane' title="Galeria" style="float:left; width:40%; height: 600px;" id="imageGallery">@galleryImage@</div>
         <div data-dojo-type='dijit/layout/ContentPane' title="Tree" style="float:left; width: 30%">
@@ -162,9 +164,8 @@
             <div>
                 <div id="treeFrom" style="margin-top:10px;">
                     <input type="hidden" id="projectPath" name="projectPath"/>
-                    <label for="tfImageName">Nom: </label>
-                    <input type="text" name="imageName" id="tfImageName" />
-                    <input type="submit" id="iSubmit" label="@copyImatge@" title="@submitTitle@" data-dojo-type="dijit/form/Button"/>
+                    <input type="hidden" name="imageName" id="tfImageName" value="coverImage" />
+                    <input type="submit" id="iSubmit" label="@copyImage@" title="@submitTitle@" data-dojo-type="dijit/form/Button"/>
                 </div>
                 <div id="info"></div>
                 <div class="errorInfo" id="errorInfo"></div>

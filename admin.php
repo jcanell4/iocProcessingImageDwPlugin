@@ -1,15 +1,8 @@
 <?php
 
 /*
- *  User Manager
  *
- *  Dokuwiki Admin Plugin
- *
- *  This version of the user manager has been modified to only work with
- *  objectified version of auth system
- *
- *  @author  neolao <neolao@neolao.com>
- *  @author  Chris Smith <chris@jalakai.co.uk>
+ * @author Daniel Criado Casas<dani.criado.casas@gmail.com>
  */
 // must be run within Dokuwiki
 if (!defined('DOKU_INC'))
