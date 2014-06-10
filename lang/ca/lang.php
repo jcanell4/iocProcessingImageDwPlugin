@@ -26,7 +26,7 @@ $lang['emptyNameImageError']   = 'El nom de la imatge no pot estar buit';
 $lang['noImageSelectError']    = 'No has seleccionat cap imatge';
 
 //form
-$lang['formLegend']            = 'Formulari per carregar algorismes de Processing';
+$lang['formLegend']            = 'Formulari per carregar algorismes de Processing.';
 $lang['file']                  = 'Fitxer';
 $lang['overwrite']             = 'Sobreescriure';
 $lang['rename']                = 'Renombrar';
