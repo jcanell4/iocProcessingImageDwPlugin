@@ -202,7 +202,7 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
                 $html .="<div class='iGallery'>"
                         . "<div class='iCheckbox'><input type='radio' name='checkImage' value='" . $file . "'/></div>"
                         . "<img src='" . $dir . $file . "' />"
-                        . "<div class='iLink'><a href='" . DOKU_URL . $dir . $file . "' target='_blank'>Veure Original</a></div></div>";
+                        . "<div class='iLink'><a href='" . DOKU_URL . $dir . $file . "' target='_blank' title='Veure original'>$name</a></div></div>";
             }
         } else {
             $html = "<div>@noPdeImage@</div>";
