@@ -95,7 +95,7 @@
 
             var existeixFitxer = function() {
                 var xhrArgs = {
-                    url: '/dokuwiki/lib/plugins/ajaxcommand/ajax.php',
+                    url: '@AJAX_COMMAND_URL@',
                     handleAs: 'json',
                     sync: 'true',
                     content: {
@@ -193,7 +193,7 @@
         });
     });
 </script>
-<form id="processingForm" name="processingForm" method="post" action="/dokuwiki/lib/plugins/ajaxcommand/ajax.php?call=@savePdeAlgorithmCommand@&sectok=@sectokValue@" enctype="multipart/form-data">
+<form id="processingForm" name="processingForm" method="post" action="@AJAX_COMMAND_URL@?call=@savePdeAlgorithmCommand@&sectok=@sectokValue@" enctype="multipart/form-data">
     <fieldset id="save_alg_ctrlSet" style="text-align: left; width:95%; height: 95%;" >
         <legend>@formLegend@</legend>
         <input type="hidden" name="do" id="doParam"/>

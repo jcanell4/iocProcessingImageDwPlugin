@@ -14,7 +14,9 @@ if (!defined('DOKU_PLUGIN'))
 if (!defined('DOKU_PROCESSING'))
     define('DOKU_PROCESSING', DOKU_PLUGIN . "processingmanager/");
 
-require_once DOKU_INC . 'inc/common.php';
+require_once DOKU_INC.'inc/common.php';
+require_once DOKU_INC.'inc/pageutils.php';
+require_once DOKU_INC.'inc/media.php';
 require_once DOKU_PROCESSING . 'generators/generateImage.php';
 require_once DOKU_PROCESSING . 'generators/loadAlgorithm.php';
 require_once DOKU_PROCESSING . 'generators/galleryImage.php';
@@ -175,22 +177,21 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
         $changes['@savePdeAlgorithmCommand@'] = $this->getConf('savePdeAlgorithmCommand');
         
         $changes['@pdeExtension@'] = $this->getConf('pdeExtension');
+        $changes['@AJAX_COMMAND_URL@'] = DOKU_URL."lib/plugins/ajaxcommand/ajax.php";
     }
 
     private function setGalleryImageChanges(& $changes) {
-        
         $changes['@galleryImage@'] = $this->getGalleryImage();
-        
-        
         $changes['@unexpectedError@'] = $this->getLang('unexpectedError');
         $changes['@emptyNameImageError@'] = $this->getLang('emptyNameImageError');
         $changes['@noImageSelectError@'] = $this->getLang('noImageSelectError');
         $changes['@submitTitle@'] = $this->getLang('submitTitle');
         $changes['@copyImage@'] = $this->getLang('copyImage');
     }
-
+    
     private function getGalleryImage() {
-        $dir = "data/media" . $this->getConf('processingImageRepository');
+        $ns = str_replace("/", ":", $this->getConf('processingImageRepository'));
+        $dir = mediaFN($ns);
         $arrayDir = scandir($dir);
         $html = "";
         if (count($arrayDir) > 2) {
@@ -199,10 +200,11 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
             $arrayDir = array_values($arrayDir);
             foreach ($arrayDir as $file) {
                 $name = substr($file, 0, -4); //Li treu la extensio .pde
+                $url = $this->getMediaUrl($ns . $file );
                 $html .="<div class='iGallery'>"
                         . "<div class='iCheckbox'><input type='radio' name='checkImage' value='" . $file . "'/></div>"
-                        . "<img src='" . $dir . $file . "' />"
-                        . "<div class='iLink'><a href='" . DOKU_URL . $dir . $file . "' target='_blank' title='Veure original'>$name</a></div></div>";
+                        . "<img src='" . $url. "' />"
+                        . "<div class='iLink'><a href='" . $url . "' target='_blank' title='Veure original'>$name</a></div></div>";
             }
         } else {
             $html = "<div>@noPdeImage@</div>";
@@ -211,6 +213,20 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
         return $html;
     }
 
+    public function getMediaUrl($id){
+        $size = media_image_preview_size($id, false, false);
+        if ($size) {
+            $more = array();
+            $more['t'] = @filemtime(mediaFN($id));
+            $more['w'] = $size[0];
+            $more['h'] = $size[1];
+            $src = ml($id, $more);
+        }else{
+            $src = ml($id,"",true);
+        }
+        return $src;
+    }
+    
     private function getUrlsValue() {
         $urls = $this->getConf('urls');
         $arrayUrls = split(',', $urls);
