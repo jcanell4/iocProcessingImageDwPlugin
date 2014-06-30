@@ -19,7 +19,7 @@ class generateImage extends abstractGenerateHtml {
         $this->adminPlugin = $adminPlugin;
     }
     
-    function initChanges($changes) {
+    function initChanges(& $changes) {
         //PARAMS
         $changes['@urlsParam@'] = $this->adminPlugin->getConf('urlsParam');
         $changes['@CookieParam@'] = $this->adminPlugin->getConf('CookieParam');
@@ -41,7 +41,7 @@ class generateImage extends abstractGenerateHtml {
         $changes['@imageNameOption@'] = $this->adminPlugin->getConf('imageNameOption');
         $changes['@imageNameOptionValue@'] = $this->adminPlugin->getConf('imageNameOptionValue');
         return $changes;
-    }
+}
     
     private function getUrlsValue() {
         $urls = $this->adminPlugin->getConf('urls');

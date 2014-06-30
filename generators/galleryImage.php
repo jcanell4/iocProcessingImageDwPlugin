@@ -18,7 +18,7 @@ class galleryImage extends abstractGenerateHtml {
     }
     
     
-    private function initChanges($changes) {
+    function initChanges(& $changes) {
         $changes['@galleryImage@'] = $this->getGalleryImage();
         $changes['@unexpectedError@'] = $this->adminPlugin->getLang('unexpectedError');
         $changes['@emptyNameImageError@'] = $this->adminPlugin->getLang('emptyNameImageError');

@@ -18,7 +18,7 @@ class loadAlgorithm extends abstractGenerateHtml {
     }
     
     
-    private function initChanges($changes) {
+    function initChanges(& $changes) {
         $changes['@emtpyError@'] = $this->adminPlugin->getLang('emptyError');
         $changes['@equalNameError@'] = $this->adminPlugin->getLang('equalNameError');
         $changes['@onlyExtensionError@'] = $this->adminPlugin->getLang('onlyExtensionError');

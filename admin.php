@@ -74,9 +74,6 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
      * output appropriate html
      */
     function html() {
-        //$changes = array();
-        //$this->setParamsChanges($changes);
-        /*
         $generateImageGenerator = new generateImage($this);
         $loadAlgorithmGenerator = new loadAlgorithm($this);
         $galleryImageGenerator = new galleryImage($this);
@@ -95,7 +92,7 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
         $galleryImageGenerator->initChanges($changesGalleryImage);
         $galleryImageGenerator->setChanges($changesGalleryImage);
         $galleryImageHtml = $galleryImageGenerator->getHtml();
-        */
+        
         if(isset($_REQUEST['tab'])){
             switch ($_REQUEST['tab']){
                 case "generateImage":
@@ -127,139 +124,5 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
             echo $dojo . $html;
         }
     }
-    /*
-    private function setParamsChanges(& $changes) {
-        $this->setGenerateImageChanges($changes);
-        $this->setLoadAlgorithmChanges($changes);
-        $this->setGalleryImageChanges($changes);
-    }
-
-    private function setGenerateImageChanges(& $changes) {
-        //PARAMS
-        $changes['@urlsParam@'] = $this->getConf('urlsParam');
-        $changes['@CookieParam@'] = $this->getConf('CookieParam');
-        $changes['@sectokParam@'] = $this->getConf('sectokParam');
-        $changes['@getPdeClassesURLParam@'] = $this->getConf('getPdeClassesURLParam');
-        $changes['@fileSenderURLParam@'] = $this->getConf('fileSenderURLParam');
-        $changes['@nameSenderURLParam@'] = $this->getConf('nameSenderURLParam');
-        //VALUES
-        $changes['@appletHeight@'] = $this->getConf('appletHeight');
-        $changes['@appletWidth@'] = $this->getConf('appletWidth');
-        $changes['@codeValue@'] = $this->getConf('codeValue');
-        $changes['@archiveValue@'] = $this->getConf('appletJarName');
-        $changes['@urlsValue@'] = $this->getUrlsValue();
-        $changes['@CookieValue@'] = $this->getCookies();
-        $changes['@sectokValue@'] = getSecurityToken();
-        $changes['@getPdeClassesURLValue@'] = DOKU_URL . "lib/plugins/ajaxcommand/ajax.php?call=" . $this->getConf('getPdeClassesInfoCommand');
-        $changes['@fileSenderURLValue@'] = DOKU_URL . "lib/plugins/ajaxcommand/ajax.php?call=" . $this->getConf('fileSenderCommand');
-        $changes['@nameSenderURLValue@'] = DOKU_URL . "lib/plugins/ajaxcommand/ajax.php?call=" . $this->getConf('nameSenderCommand');
-        $changes['@imageNameOption@'] = $this->getConf('imageNameOption');
-        $changes['@imageNameOptionValue@'] = $this->getConf('imageNameOptionValue');
-    }
-
-    private function setLoadAlgorithmChanges(& $changes) {
-        $changes['@emtpyError@'] = $this->getLang('emptyError');
-        $changes['@equalNameError@'] = $this->getLang('equalNameError');
-        $changes['@onlyExtensionError@'] = $this->getLang('onlyExtensionError');
-        $changes['@fileExistsError@'] = $this->getLang('fileExistsError');
-        $changes['@unexpectedError@'] = $this->getLang('unexpectedError');
-        $changes['@formLegend@'] = $this->getLang('formLegend');
-        $changes['@file@'] = $this->getLang('file');
-        $changes['@overwrite@'] = $this->getLang('overwrite');
-        $changes['@rename@'] = $this->getLang('rename');
-        $changes['@name@'] = $this->getLang('name');
-        $changes['@description@'] = $this->getLang('description');
-        $changes['@reset@'] = $this->getLang('reset');
-        $changes['@upload@'] = $this->getLang('upload');
-        $changes['@select@'] = $this->getLang('select');
-        $changes['@nameTitlte@'] = $this->getLang('nameTitle');
-        $changes['@renameTitle@'] = $this->getLang('renameTitle');
-        
-        
-        $changes['@appendAlgorithmParam@'] = $this->getConf('appendAlgorithmParam');
-        $changes['@modifyAlgorithmParam@'] = $this->getConf('modifyAlgorithmParam');
-        $changes['@existsAlgorithmParam@'] = $this->getConf('existsAlgorithmParam');
-        $changes['@savePdeAlgorithmCommand@'] = $this->getConf('savePdeAlgorithmCommand');
-        
-        $changes['@pdeExtension@'] = $this->getConf('pdeExtension');
-        $changes['@AJAX_COMMAND_URL@'] = DOKU_URL."lib/plugins/ajaxcommand/ajax.php";
-    }
-
-    private function setGalleryImageChanges(& $changes) {
-        $changes['@galleryImage@'] = $this->getGalleryImage();
-        $changes['@unexpectedError@'] = $this->getLang('unexpectedError');
-        $changes['@emptyNameImageError@'] = $this->getLang('emptyNameImageError');
-        $changes['@noImageSelectError@'] = $this->getLang('noImageSelectError');
-        $changes['@submitTitle@'] = $this->getLang('submitTitle');
-        $changes['@copyImage@'] = $this->getLang('copyImage');
-    }
-    
-    
-    private function getGalleryImage() {
-        $ns = str_replace("/", ":", $this->getConf('processingImageRepository'));
-        $dir = mediaFN($ns);
-        $arrayDir = scandir($dir);
-        $html = "";
-        if (count($arrayDir) > 2) {
-            unset($arrayDir[0]);
-            unset($arrayDir[1]);
-            $arrayDir = array_values($arrayDir);
-            foreach ($arrayDir as $file) {
-                $name = substr($file, 0, -4); //Li treu la extensio .pde
-                $url = $this->getMediaUrl($ns . $file );
-                $html .="<div class='iGallery'>"
-                        . "<div class='iCheckbox'><input type='radio' name='checkImage' value='" . $file . "'/></div>"
-                        . "<img src='" . $url. "' />"
-                        . "<div class='iLink'><a href='" . $url . "' target='_blank' title='Veure original'>$name</a></div></div>";
-            }
-        } else {
-            $html = "<div>@noPdeImage@</div>";
-        }
-        closedir($arrayDir);
-        return $html;
-    }
-
-    public function getMediaUrl($id){
-        $size = media_image_preview_size($id, false, false);
-        if ($size) {
-            $more = array();
-            $more['t'] = @filemtime(mediaFN($id));
-            $more['w'] = $size[0];
-            $more['h'] = $size[1];
-            $src = ml($id, $more);
-        }else{
-            $src = ml($id,"",true);
-        }
-        return $src;
-    }
-    
-    private function getUrlsValue() {
-        $urls = $this->getConf('urls');
-        $arrayUrls = split(',', $urls);
-//        $urlsValue = DOKU_URL."lib/_java/pde/classes/";
-        $urlsValue = "";
-        $urlsLink = "";
-        foreach ($arrayUrls as $key => $value) {
-            $urlsValue .= $urlsLink . DOKU_URL . $value;
-            $urlsLink = self::$COMMA;
-        }
-        return $urlsValue;
-    }*/
-
-    /*
-    private function getCookies() {
-        global $_COOKIE;
-        $strCookie = "";
-        $ctrl = false;
-        foreach ($_COOKIE as $key => $value) {
-            if ($ctrl) {
-                $strCookie .= "; ";
-            } else {
-                $ctrl = true;
-            }
-            $strCookie .= $key . "=" . rawurlencode($value);
-        }
-        return $strCookie;
-    }*/
 
 }
