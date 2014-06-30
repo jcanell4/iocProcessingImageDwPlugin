@@ -74,23 +74,28 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
      * output appropriate html
      */
     function html() {
-        $changes = array();
-        $this->setParamsChanges($changes);
+        //$changes = array();
+        //$this->setParamsChanges($changes);
+        /*
+        $generateImageGenerator = new generateImage($this);
+        $loadAlgorithmGenerator = new loadAlgorithm($this);
+        $galleryImageGenerator = new galleryImage($this);
 
-        $generateImageGenerator = new generateImage();
-        $loadAlgorithmGenerator = new loadAlgorithm();
-        $galleryImageGenerator = new galleryImage();
-
-
-        $generateImageGenerator->setChanges($changes);
+        $changesGenerateImage = array();
+        $generateImageGenerator->initChanges($changesGenerateImage);
+        $generateImageGenerator->setChanges($changesGenerateImage);
         $generateImageHtml = $generateImageGenerator->getHtml();
 
-        $loadAlgorithmGenerator->setChanges($changes);
+        $changesLoadAlgorithm = array();
+        $loadAlgorithmGenerator->initChanges($changesLoadAlgorithm);
+        $loadAlgorithmGenerator->setChanges($changesLoadAlgorithm);
         $loadAlgorithmHtml = $loadAlgorithmGenerator->getHtml();
 
-        $galleryImageGenerator->setChanges($changes);
+        $changesGalleryImage = array();
+        $galleryImageGenerator->initChanges($changesGalleryImage);
+        $galleryImageGenerator->setChanges($changesGalleryImage);
         $galleryImageHtml = $galleryImageGenerator->getHtml();
-        
+        */
         if(isset($_REQUEST['tab'])){
             switch ($_REQUEST['tab']){
                 case "generateImage":
@@ -122,7 +127,7 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
             echo $dojo . $html;
         }
     }
-
+    /*
     private function setParamsChanges(& $changes) {
         $this->setGenerateImageChanges($changes);
         $this->setLoadAlgorithmChanges($changes);
@@ -189,6 +194,7 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
         $changes['@copyImage@'] = $this->getLang('copyImage');
     }
     
+    
     private function getGalleryImage() {
         $ns = str_replace("/", ":", $this->getConf('processingImageRepository'));
         $dir = mediaFN($ns);
@@ -238,13 +244,9 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
             $urlsLink = self::$COMMA;
         }
         return $urlsValue;
-    }
+    }*/
 
-    /**
-     * Genera un string amb les cookies.
-     * @global type $_COOKIE
-     * @return string 
-     */
+    /*
     private function getCookies() {
         global $_COOKIE;
         $strCookie = "";
@@ -258,6 +260,6 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
             $strCookie .= $key . "=" . rawurlencode($value);
         }
         return $strCookie;
-    }
+    }*/
 
 }

@@ -5,6 +5,7 @@ if(!defined('DOKU_INC')) die();
 abstract class abstractGenerateHtml {
     private $changes;
     private $file;
+    private $adminPlugin;
 
     protected function setFile($file) {
         $this->file=$file;
@@ -12,6 +13,10 @@ abstract class abstractGenerateHtml {
     
     public function setChanges($changes) {
         $this->changes=$changes;
+    }
+    
+    public function initChanges() {
+        return array();
     }
     
     public function getHtml() {
