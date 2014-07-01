@@ -19,7 +19,7 @@ class loadAlgorithm extends abstractGenerateHtml {
     
     
     function initChanges(& $changes) {
-        $changes['@emtpyError@'] = $this->adminPlugin->getLang('emptyError');
+        $changes['@emptyError@'] = $this->adminPlugin->getLang('emptyError');
         $changes['@equalNameError@'] = $this->adminPlugin->getLang('equalNameError');
         $changes['@onlyExtensionError@'] = $this->adminPlugin->getLang('onlyExtensionError');
         $changes['@fileExistsError@'] = $this->adminPlugin->getLang('fileExistsError');
@@ -33,7 +33,7 @@ class loadAlgorithm extends abstractGenerateHtml {
         $changes['@reset@'] = $this->adminPlugin->getLang('reset');
         $changes['@upload@'] = $this->adminPlugin->getLang('upload');
         $changes['@select@'] = $this->adminPlugin->getLang('select');
-        $changes['@nameTitlte@'] = $this->adminPlugin->getLang('nameTitle');
+        $changes['@nameTitle@'] = $this->adminPlugin->getLang('nameTitle');
         $changes['@renameTitle@'] = $this->adminPlugin->getLang('renameTitle');
         
         $changes['@appendAlgorithmParam@'] = $this->adminPlugin->getConf('appendAlgorithmParam');

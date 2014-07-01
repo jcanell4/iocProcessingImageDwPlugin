@@ -78,19 +78,17 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
         $loadAlgorithmGenerator = new loadAlgorithm($this);
         $galleryImageGenerator = new galleryImage($this);
 
-        $changesGenerateImage = array();
-        $generateImageGenerator->initChanges($changesGenerateImage);
-        $generateImageGenerator->setChanges($changesGenerateImage);
+        $changes = array();
+        $generateImageGenerator->initChanges($changes);
+        $generateImageGenerator->setChanges($changes);
         $generateImageHtml = $generateImageGenerator->getHtml();
 
-        $changesLoadAlgorithm = array();
-        $loadAlgorithmGenerator->initChanges($changesLoadAlgorithm);
-        $loadAlgorithmGenerator->setChanges($changesLoadAlgorithm);
+        $loadAlgorithmGenerator->initChanges($changes);
+        $loadAlgorithmGenerator->setChanges($changes);
         $loadAlgorithmHtml = $loadAlgorithmGenerator->getHtml();
 
-        $changesGalleryImage = array();
-        $galleryImageGenerator->initChanges($changesGalleryImage);
-        $galleryImageGenerator->setChanges($changesGalleryImage);
+        $galleryImageGenerator->initChanges($changes);
+        $galleryImageGenerator->setChanges($changes);
         $galleryImageHtml = $galleryImageGenerator->getHtml();
         
         if(isset($_REQUEST['tab'])){
