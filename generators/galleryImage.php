@@ -48,7 +48,6 @@ class galleryImage extends abstractGenerateHtml {
         } else {
             $html = "<div>@noPdeImage@</div>";
         }
-        closedir($arrayDir);
         return $html;
     }
     
