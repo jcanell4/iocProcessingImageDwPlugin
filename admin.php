@@ -112,10 +112,10 @@ class admin_plugin_processingmanager extends DokuWiki_Admin_Plugin {
                     . "]);</script>";
             $html = ""
                     . "<div style='width: 800; height: 650px;'>"
-                    . "<div data-dojo-type='dijit/layout/TabContainer' style='width:100%; height: 100%;'>"
-                    . "<div data-dojo-type='dijit/layout/ContentPane' title='Generació' id='generateImage' >" . $generateImageHtml . "</div>"
-                    . "<div data-dojo-type='dijit/layout/ContentPane' title='Càrrega' id='loadAlgorithm'>" . $loadAlgorithmHtml . "</div>"
-                    . "<div data-dojo-type='dijit/layout/ContentPane' title='Galeria' id='galleryImage'>" . $galleryImageHtml . "</div>"
+                    . "<div data-dojo-type='dijit.layout.TabContainer' style='width:100%; height: 100%;'>"
+                    . "<div data-dojo-type='dijit.layout.ContentPane' title='Generació' id='generateImage' >" . $generateImageHtml . "</div>"
+                    . "<div data-dojo-type='dijit.layout.ContentPane' title='Càrrega' id='loadAlgorithm'>" . $loadAlgorithmHtml . "</div>"
+                    . "<div data-dojo-type='dijit.layout.ContentPane' title='Galeria' id='galleryImage'>" . $galleryImageHtml . "</div>"
                     . "</div>"
                     . "</div>"
                     . "";

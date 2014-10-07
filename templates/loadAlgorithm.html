@@ -11,8 +11,6 @@
                 , "dojo/_base/array"
                 , 'dijit/form/Button'
                 , 'dojox/form/Uploader'
-                , 'dijit/layout/TabContainer'
-                , 'dijit/layout/ContentPane'
                 , 'dojo/domReady!'
     ], function(dom, xhr, cn, registry, ready, domAttr, query, html, Array) {
         ready(function() {
@@ -202,7 +200,7 @@
             <span class="labelcol">
                 <label for="uploader">@file@: </label>
             </span>
-            <div id="uploader" data-dojo-type="dojox/form/Uploader" data-dojo-props="name:'uploadedfile',showInput:'before',isDebug:true">@select@</div>
+            <div id="uploader" data-dojo-type="dojox.form.Uploader" data-dojo-props="name:'uploadedfile',showInput:'before',isDebug:true">@select@</div>
             <span class="errorInfo" id="errorFile"></span>
         </div>
         <div class="processingField existsFile">
@@ -233,8 +231,12 @@
         </div>
         <div class="processingField">
             <span class="labelcol">&nbsp;</span>
-            <input type="button" id="remBtn" label="@reset@" data-dojo-type="dijit/form/Button" />
-            <input type="submit" id="submit" label="@upload@" data-dojo-type="dijit/form/Button" />
+            <button type="button" id="remBtn" data-dojo-type="dijit.form.Button" >
+                @reset@
+            </button>
+            <button type="submit" id="submit" data-dojo-type="dijit.form.Button" >
+                @upload@
+            </button>
             <span id="infoSubmit"></span>
             <span class="errorInfo" id="infoErrorSubmit"></span>
         </div>

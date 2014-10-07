@@ -1,6 +1,6 @@
 <script type="text/javascript">
     require([
-        "dijit/Tree"
+                  "dijit/Tree"
                 , "dijit/form/RadioButton"
                 , "dijit/tree/ObjectStoreModel"
                 , "dojo/store/JsonRest"
@@ -15,11 +15,10 @@
                 , 'dojo/ready'
                 , "dijit/layout/ContentPane"
                 , "dijit/form/Button"
-                , 'dojo/domReady!'
     ], function(Tree, RadioButton, ObjectStoreModel, JsonRest, domAttr, 
                     dom, cn, registry, declare, event, xhr, query, ready) {
         ready(function(){
-            var nodeId = "treeContentPane"
+            var nodeId = "gallery_nTree";
             var commandUrl = "lib/plugins/ajaxcommand/ajaxrest.php/ns_tree_rest/@sectokValue@/d/";
 
 
@@ -54,7 +53,7 @@
             });
             var tree = new Tree({
                 id: "gallery_nTree"
-                , title: "My tree"
+                , title: "Tree"
                 , model: myModel
                 , persist: false
                 , showRoot: false
@@ -132,24 +131,28 @@
 
 <style type="text/css">
 </style>
-<form id="fGallery" name="igForm" method="post" action="lib/plugins/ajaxcommand/ajax.php?call=copy_image_to_project&sectok=@sectokValue@">
     <div class="iImporter">
-        <div data-dojo-type='dijit/layout/ContentPane' title="Galeria" style="float:left; width:40%; height: 600px;" id="imageGallery">@galleryImage@</div>
-        <div data-dojo-type='dijit/layout/ContentPane' title="Tree" style="float:left; width: 30%">
-            <div>
-                <div id="treeContentPane"></div>
+        <form id="fGallery" name="fGallery" method="post" action="lib/plugins/ajaxcommand/ajax.php?call=copy_image_to_project&sectok=@sectokValue@">        
+            <div data-dojo-type='dijit.layout.ContentPane' title="Galeria" style="float:left; width:40%; height: 600px;" id="imageGallery">
+                @galleryImage@
             </div>
-        </div>
-        <div data-dojo-type='dijit/layout/ContentPane' title="Tree">
-            <div>
-                <div id="treeFrom" style="margin-top:10px;">
-                    <input type="hidden" id="projectPath" name="projectPath"/>
-                    <input type="hidden" name="imageName" id="tfImageName" value="coverImage" />
-                    <input type="submit" id="iSubmit" label="@copyImage@" title="@submitTitle@" data-dojo-type="dijit/form/Button"/>
+            <div id="treeContentPane" data-dojo-type='dijit/layout/ContentPane' style="float:left; width: 30%">
+                <div>
+                    <div id="gallery_nTree"></div>
                 </div>
-                <div id="info"></div>
-                <div class="errorInfo" id="errorInfo"></div>
             </div>
-        </div>
+            <div id="inputGallery" data-dojo-type='dijit.layout.ContentPane'>
+                <div>
+                    <div id="treeFrom" style="margin-top:10px;">
+                        <input type="hidden" id="projectPath" name="projectPath"/>
+                        <input type="hidden" name="imageName" id="tfImageName" value="coverImage" />
+                        <button type="submit" id="iSubmit" title="@submitTitle@" data-dojo-type="dijit.form.Button">
+                                @copyImage@
+                        </button>
+                    </div>
+                    <div id="info"></div>
+                    <div class="errorInfo" id="errorInfo"></div>
+                </div>
+            </div>
+        </form>            
     </div>
-</form>
